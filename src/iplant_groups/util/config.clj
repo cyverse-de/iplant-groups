@@ -26,30 +26,30 @@
   "A ref for storing the symbols used to get configuration settings."
   (ref []))
 
-(cc/defprop-int listen-port
+(cc/defprop-optint listen-port
   "The port that iplant-groups listens on."
   [props config-valid configs]
-  "iplant-groups.app.listen-port")
+  "iplant-groups.app.listen-port" 60000)
 
-(cc/defprop-str grouper-base
+(cc/defprop-optstr grouper-base
   "The base URL to use when connecting to the Grouper API."
   [props config-valid configs]
-  "iplant-groups.grouper.base-url")
+  "iplant-groups.grouper.base-url" "http://grouper:60000/grouper-ws/")
 
-(cc/defprop-str grouper-api-version
+(cc/defprop-optstr grouper-api-version
   "The Grouper REST API version used by this facade."
   [props config-valid configs]
-  "iplant-groups.grouper.api-version")
+  "iplant-groups.grouper.api-version" "v2_2_000")
 
-(cc/defprop-str grouper-username
+(cc/defprop-optstr grouper-username
   "The username to use when authenticating to Grouper."
   [props config-valid configs]
-  "iplant-groups.grouper.username")
+  "iplant-groups.grouper.username" "GrouperSystem")
 
-(cc/defprop-str grouper-password
+(cc/defprop-optstr grouper-password
   "The password to use when authenticating to Grouper."
   [props config-valid configs]
-  "iplant-groups.grouper.password")
+  "iplant-groups.grouper.password" "notprod")
 
 (defn- validate-config
   "Validates the configuration settings after they've been loaded."
