@@ -29,7 +29,10 @@
                  [org.iplantc/service-logging "5.2.8.0"]
                  [ring/ring-core "1.4.0"]
                  [ring/ring-jetty-adapter "1.4.0"]]
+  :eastwood {:exclude-namespaces [:test-paths]
+             :linters [:wrong-arity :wrong-ns-form :wrong-pre-post :wrong-tag :misplaced-docstrings]}
   :plugins [[lein-ring "0.9.6"]
+            [jonase/eastwood "0.2.3"]
             [test2junit "1.1.3"]]
   :profiles {:dev {:resource-paths ["conf/test"]}}
   ;; compojure-api route macros should not be AOT compiled:

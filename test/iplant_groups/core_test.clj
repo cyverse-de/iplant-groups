@@ -1,7 +1,14 @@
 (ns iplant_groups.core-test
-  (:use [iplant_groups.core])
-  (:use [clojure.test]))
+  (:use [clojure.test]
+        [iplant_groups.core])
+  (:require [iplant_groups.util.config :as config]))
 
-(deftest silly-test
-  (testing "This test is totally fake, but it'll pass!"
-    (is (= 1 1))))
+(deftest test-default-config
+  (require 'iplant_groups.util.config :reload)
+  (config/load-config-from-file "conf/test/empty.properties")
+  (testing "default configuration settings"
+    (is (= (config/listen-port) 60000))
+    (is (= (config/grouper-base) "http://grouper:60000/grouper-ws/"))
+    (is (= (config/grouper-api-version) "v2_2_000"))
+    (is (= (config/grouper-username) "GrouperSystem"))
+    (is (= (config/grouper-password) "notprod"))))
