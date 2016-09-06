@@ -7,9 +7,9 @@
       (string/trim (:out (sh "git" "rev-parse" "HEAD")))
       ""))
 
-(defproject org.iplantc/iplant-groups "5.2.8.0"
+(defproject org.cyverse/iplant-groups "2.8.1-SNAPSHOT"
   :description "A REST front-end for Grouper."
-  :url "https://github.com/iPlantCollaborativeOpenSource/DE"
+  :url "https://github.com/cyverse-de/iplant-groups"
   :license {:name "BSD"
             :url "http://iplantcollaborative.org/sites/default/files/iPLANT-LICENSE.txt"}
   :manifest {"Git-Ref" ~(git-ref)}
@@ -22,11 +22,11 @@
                  [medley "0.7.0"]
                  [metosin/compojure-api "0.24.5"]
                  [me.raynes/fs "1.4.6"]
-                 [org.iplantc/clojure-commons "5.2.8.0"]
-                 [org.iplantc/common-cfg "5.2.8.0"]
-                 [org.iplantc/common-cli "5.2.8.0"]
-                 [org.iplantc/common-swagger-api "5.2.8.0"]
-                 [org.iplantc/service-logging "5.2.8.0"]
+                 [org.cyverse/clojure-commons "2.8.0"]
+                 [org.cyverse/common-cfg "2.8.0"]
+                 [org.cyverse/common-cli "2.8.0"]
+                 [org.cyverse/common-swagger-api "2.8.0"]
+                 [org.cyverse/service-logging "2.8.0"]
                  [ring/ring-core "1.4.0"]
                  [ring/ring-jetty-adapter "1.4.0"]]
   :eastwood {:exclude-namespaces [:test-paths]
