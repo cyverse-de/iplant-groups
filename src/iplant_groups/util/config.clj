@@ -10,7 +10,7 @@
 (def svc-info
   {:desc     "RESTful facade for the Grouper API."
    :app-name "iplant-groups"
-   :group-id "org.iplantc"
+   :group-id "org.cyverse"
    :art-id   "iplant-groups"
    :service  "iplant-groups"})
 
