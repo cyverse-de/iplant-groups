@@ -1,3 +1,4 @@
+#!groovy
 def repo = "iplant-groups"
 def dockerUser = "discoenv"
 
