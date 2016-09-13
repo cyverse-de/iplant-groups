@@ -5,8 +5,8 @@
         [ring.util.http-response :only [ok]])
   (:require [iplant_groups.service.attributes :as attributes]))
 
-(defroutes* attributes
-  (GET* "/" []
+(defroutes attributes
+  (GET "/" []
         :query       [params AttributeSearchParams]
         :return      AttributeNameList
         :summary     "Attribute Name/Resource Search"
@@ -14,7 +14,7 @@
         the 'exact' parameter, to look them up exactly by name."
         (ok (attributes/attribute-search params)))
 
-  (GET* "/permissions" []
+  (GET "/permissions" []
         :query       [params AttributeAssignmentSearchParams]
         :return      PermissionWithDetailList
         :summary     "Permissions Search/Lookup"
@@ -22,7 +22,7 @@
         to the given user will be listed."
         (ok (attributes/permission-assignment-search params)))
 
-  (POST* "/" []
+  (POST "/" []
         :return      AttributeName
         :query       [params StandardUserQueryParams]
         :body        [body (describe BaseAttributeName "The attribute/resource to add.")]
@@ -32,19 +32,19 @@
         Grouper UI (most likely), as there is no web service for creating them."
         (ok (attributes/add-attribute-name body params)))
 
-  (context* "/:attribute-name" []
+  (context "/:attribute-name" []
     :path-params [attribute-name :- AttributeNamePathParam]
 
-    (DELETE* "/" []
+    (DELETE "/" []
              :query       [params StandardUserQueryParams]
              :summary     "Remove Attribute Name/Resource Definition"
              :description "This endpoint allows an existing attribute name to be deleted."
              (attributes/delete-attribute-name attribute-name params)
              (ok))
 
-    (context* "/permissions" []
+    (context "/permissions" []
 
-      (GET* "/" []
+      (GET "/" []
             :query [params StandardUserQueryParams]
             :return PermissionWithDetailList
             :summary "Permissions Lookup"
@@ -52,7 +52,7 @@
             permissions that are visible to the given user will be listed."
             (ok (attributes/permission-assignment-search (assoc params :attribute_def_names [attribute-name]))))
 
-      (PUT* "/" []
+      (PUT "/" []
             :query [params StandardUserQueryParams]
             :return PermissionWithDetailList
             :body [body (describe PermissionReplacement "The new permission assignments.")]
@@ -62,11 +62,11 @@
             (attributes/replace-permissions params body attribute-name)
             (ok (attributes/permission-assignment-search (assoc params :attribute_def_names [attribute-name]))))
 
-      (context* "/roles/:role-name/:action-name" []
+      (context "/roles/:role-name/:action-name" []
         :path-params [role-name   :- GroupNamePathParam
                       action-name :- NonBlankString]
 
-        (PUT* "/" []
+        (PUT "/" []
               :return AttributeAssignment
               :body [body PermissionAllowed]
               :query  [params StandardUserQueryParams]
@@ -77,7 +77,7 @@
               denying the permission (the latter is useful if the role has an inherited permission)."
               (ok (attributes/assign-role-permission params body attribute-name role-name action-name)))
 
-        (DELETE* "/" []
+        (DELETE "/" []
                  :return AttributeAssignment
                  :query  [params StandardUserQueryParams]
                  :summary "Remove Role Permission"
@@ -85,11 +85,11 @@
                  corresponding to this attribute, group, action, and allowed/disallowed value is removed, if it exists."
                  (ok (attributes/remove-role-permission params attribute-name role-name action-name))))
 
-      (context* "/memberships/:role-name/:subject-id" []
+      (context "/memberships/:role-name/:subject-id" []
         :path-params [role-name  :- GroupNamePathParam
                       subject-id :- SubjectIdPathParam]
 
-        (DELETE* "/" []
+        (DELETE "/" []
                  :return AttributeAssignmentList
                  :query [params StandardUserQueryParams]
                  :summary "Remove Membership Permissions"
@@ -98,10 +98,10 @@
                  this endpoint."
                  (ok (attributes/remove-existing-membership-permissions params attribute-name role-name subject-id)))
 
-        (context* "/:action-name" []
+        (context "/:action-name" []
           :path-params [action-name :- NonBlankString]
 
-          (PUT* "/" []
+          (PUT "/" []
                 :return AttributeAssignment
                 :body [body PermissionAllowed]
                 :query  [params StandardUserQueryParams]
@@ -114,7 +114,7 @@
                 (ok (attributes/assign-membership-permission params body attribute-name role-name subject-id
                                                              action-name)))
 
-          (DELETE* "/" []
+          (DELETE "/" []
                    :return AttributeAssignment
                    :query  [params StandardUserQueryParams]
                    :summary "Remove Membership Permission"

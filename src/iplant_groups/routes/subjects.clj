@@ -6,15 +6,15 @@
         [ring.util.http-response :only [ok]])
   (:require [iplant_groups.service.subjects :as subjects]))
 
-(defroutes* subjects
-  (GET* "/" []
+(defroutes subjects
+  (GET "/" []
         :query       [params SearchParams]
         :return      SubjectList
         :summary     "Subject Search"
         :description "This endpoint allows callers to search for subjects by name."
         (ok (subjects/subject-search params)))
 
-  (GET* "/:subject-id" []
+  (GET "/:subject-id" []
         :path-params [subject-id :- SubjectIdPathParam]
         :query       [params StandardUserQueryParams]
         :return      Subject
@@ -22,7 +22,7 @@
         :description "This endpoint allows callers to get information about a single subject."
         (ok (subjects/get-subject subject-id params)))
 
-  (GET* "/:subject-id/groups" []
+  (GET "/:subject-id/groups" []
         :path-params [subject-id :- SubjectIdPathParam]
         :query       [params GroupsForSubjectParams]
         :return      GroupList
