@@ -34,12 +34,9 @@
   :plugins [[lein-ring "0.9.6"]
             [jonase/eastwood "0.2.3"]
             [test2junit "1.1.3"]]
-  :profiles {:dev {:resource-paths ["conf/test"]}}
-  ;; compojure-api route macros should not be AOT compiled:
-  ;; https://github.com/metosin/compojure-api/issues/135#issuecomment-121388539
-  ;; https://github.com/metosin/compojure-api/issues/102
-  :aot [#"iplant_groups.(?!routes).*"]
-  :main iplant_groups.core
+  :profiles {:dev {:resource-paths ["conf/test"]}
+             :uberjar {:aot :all}}
+  :main ^:skip-aot iplant_groups.core
   :ring {:handler iplant_groups.routes/app
          :init    iplant_groups.core/init-service
          :port    31310}
