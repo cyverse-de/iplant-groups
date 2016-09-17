@@ -6,8 +6,8 @@
         [ring.util.http-response :only [ok]])
   (:require [iplant_groups.service.groups :as groups]))
 
-(defroutes* groups
-  (GET* "/" []
+(defroutes groups
+  (GET "/" []
         :query       [params GroupSearchParams]
         :return      GroupList
         :summary     "Group Search"
@@ -17,7 +17,7 @@
         folder in the system."
         (ok (groups/group-search params)))
 
-  (POST* "/" []
+  (POST "/" []
         :return      GroupWithDetail
         :query       [params StandardUserQueryParams]
         :body        [body (describe BaseGroup "The group to add.")]
@@ -25,10 +25,10 @@
         :description "This endpoint allows adding a new group."
         (ok (groups/add-group body params)))
 
-  (context* "/:group-name" []
+  (context "/:group-name" []
     :path-params [group-name :- GroupNamePathParam]
 
-    (GET* "/" []
+    (GET "/" []
           :query       [params StandardUserQueryParams]
           :return      GroupWithDetail
           :summary     "Get Group Information"
@@ -36,7 +36,7 @@
           group."
           (ok (groups/get-group group-name params)))
 
-    (PUT* "/" []
+    (PUT "/" []
           :return      GroupWithDetail
           :query       [params StandardUserQueryParams]
           :body        [body (describe GroupUpdate "The group information to update.")]
@@ -44,15 +44,15 @@
           :description "This endpoint allows callers to update group information."
           (ok (groups/update-group group-name body params)))
 
-    (DELETE* "/" []
+    (DELETE "/" []
           :query       [params StandardUserQueryParams]
           :return      GroupStub
           :summary     "Delete Group"
           :description "This endpoint allows deleting a group if the current user has permissions to do so."
           (ok (groups/delete-group group-name params)))
 
-    (context* "/privileges" []
-      (GET* "/" []
+    (context "/privileges" []
+      (GET "/" []
             :query       [params StandardUserQueryParams]
             :return      GroupPrivileges
             :summary     "List Group Privileges"
@@ -60,11 +60,11 @@
             group."
             (ok (groups/get-group-privileges group-name params)))
 
-      (context* "/:subject-id/:privilege-name" []
+      (context "/:subject-id/:privilege-name" []
         :path-params [subject-id :- SubjectIdPathParam
                       privilege-name :- ValidGroupPrivileges]
 
-        (PUT* "/" []
+        (PUT "/" []
               :query       [params StandardUserQueryParams]
               :return      Privilege
               :summary     "Add Group Privilege"
@@ -72,7 +72,7 @@
               specific group."
               (ok (groups/add-group-privilege group-name subject-id privilege-name params)))
 
-        (DELETE* "/" []
+        (DELETE "/" []
               :query       [params StandardUserQueryParams]
               :return      Privilege
               :summary     "Remove Group Privilege"
@@ -80,15 +80,15 @@
               specific group."
               (ok (groups/remove-group-privilege group-name subject-id privilege-name params)))))
 
-    (context* "/members" []
-      (GET* "/" []
+    (context "/members" []
+      (GET "/" []
             :query       [params StandardUserQueryParams]
             :return      GroupMembers
             :summary     "List Group Members"
             :description "This endpoint allows callers to list the members of a single group."
             (ok (groups/get-group-members group-name params)))
 
-      (PUT* "/" []
+      (PUT "/" []
             :query       [params StandardUserQueryParams]
             :body        [body (describe GroupMembersUpdate "The new list of group member IDs.")]
             :return      GroupMembersUpdateResponse
@@ -96,10 +96,10 @@
             :description "This endpoint allows callers to completely replace the members of a group."
             (ok (groups/replace-members group-name body params)))
 
-      (context* "/:subject-id" []
+      (context "/:subject-id" []
         :path-params [subject-id :- SubjectIdPathParam]
 
-        (PUT* "/" []
+        (PUT "/" []
               :query       [params StandardUserQueryParams]
               :summary     "Add Group members"
               :description "This endpoint allows callers to add members to a group. Note that a request to add a user
@@ -107,7 +107,7 @@
               (groups/add-member group-name subject-id params)
               (ok))
 
-        (DELETE* "/" []
+        (DELETE "/" []
                  :query       [params StandardUserQueryParams]
                  :summary     "Remove Group members"
                  :description "This endpoint allows callers to add members to a group. Note that a request to remove

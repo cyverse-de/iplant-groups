@@ -6,8 +6,8 @@
             [iplant_groups.clients.grouper :as grouper]
             [iplant_groups.util.config :as config]))
 
-(defroutes* status
-  (GET* "/" [:as {:keys [server-name server-port]}]
+(defroutes status
+  (GET "/" [:as {:keys [server-name server-port]}]
     :query [{:keys [expecting]} StatusParams]
     :return IplantGroupsStatusResponse
     :summary "Service Information"

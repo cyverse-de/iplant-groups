@@ -16,41 +16,41 @@
 
 (defapi app
   {:exceptions cx/exception-handlers}
-  (swagger-ui config/docs-uri
-    :validator-url nil)
-  (swagger-docs
-   {:info {:title       "RESTful Service Facade for Grouper"
-           :description "Documentation for the iplant-groups API"
-           :version     "2.0.0"}
-    :tags [{:name "folders", :description "Folder Information"}
-           {:name "groups", :description "Group Information"}
-           {:name "service-info", :description "Service Status Information"}
-           {:name "subjects", :description "Subject Information"}
-           {:name "attributes", :description "Attribute/Permission Information"}]})
-  (middlewares
+  (swagger-routes
+    {:ui      config/docs-uri
+     :options {:ui {:validatorUrl nil}}
+     :data    {:info {:title       "RESTful Service Facade for Grouper"
+                      :description "Documentation for the iplant-groups API"
+                      :version     "2.8.0"}
+               :tags [{:name "folders", :description "Folder Information"}
+                      {:name "groups", :description "Group Information"}
+                      {:name "service-info", :description "Service Status Information"}
+                      {:name "subjects", :description "Subject Information"}
+                      {:name "attributes", :description "Attribute/Permission Information"}]}})
+  (middleware
    [clean-context
     wrap-keyword-params
     wrap-query-params
-   (wrap-routes wrap-logging)]
-   (context* "/" []
+    [wrap-routes wrap-logging]]
+   (context "/" []
     :tags ["service-info"]
     status-routes/status))
-  (middlewares
+  (middleware
    [clean-context
     wrap-keyword-params
     wrap-query-params
     add-user-to-context
     wrap-logging]
-   (context* "/folders" []
+   (context "/folders" []
     :tags ["folders"]
     folder-routes/folders)
-   (context* "/groups" []
+   (context "/groups" []
     :tags ["groups"]
     group-routes/groups)
-   (context* "/subjects" []
+   (context "/subjects" []
     :tags ["subjects"]
     subject-routes/subjects)
-   (context* "/attributes" []
+   (context "/attributes" []
     :tags ["attributes"]
     attribute-routes/attributes)
-   (route/not-found (json/encode {:success false :msg "unrecognized service path"}))))
+   (undocumented (route/not-found (json/encode {:success false :msg "unrecognized service path"})))))

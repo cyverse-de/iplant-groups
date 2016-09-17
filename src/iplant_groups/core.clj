@@ -1,6 +1,7 @@
 (ns iplant_groups.core
   (:gen-class)
-  (:require [iplant_groups.util.config :as config]
+  (:require [iplant_groups.routes :as routes]
+            [iplant_groups.util.config :as config]
             [me.raynes.fs :as fs]
             [clj-http.client :as http]
             [clojure.tools.logging :as log]
@@ -24,10 +25,9 @@
 
 (defn run-jetty
   []
-  (require 'iplant_groups.routes
-           'ring.adapter.jetty)
+  (require 'ring.adapter.jetty)
   (log/warn "Started listening on" (config/listen-port))
-  ((eval 'ring.adapter.jetty/run-jetty) (eval 'iplant_groups.routes/app) {:port (config/listen-port)}))
+  ((eval 'ring.adapter.jetty/run-jetty) routes/app {:port (config/listen-port)}))
 
 (defn -main
   [& args]

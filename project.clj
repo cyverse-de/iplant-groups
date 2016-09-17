@@ -15,31 +15,28 @@
   :manifest {"Git-Ref" ~(git-ref)}
   :uberjar-name "iplant-groups-standalone.jar"
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [cheshire "5.5.0"]
+                 [cheshire "5.6.3"]
                  [clj-http "2.0.0"]
-                 [clj-time "0.10.0"]
+                 [clj-time "0.12.0"]
                  [com.cemerick/url "0.1.1"]
-                 [medley "0.7.0"]
-                 [metosin/compojure-api "0.24.5"]
+                 [medley "0.8.2"]
+                 [metosin/compojure-api "1.1.8"]
                  [me.raynes/fs "1.4.6"]
-                 [org.cyverse/clojure-commons "2.8.0"]
+                 [org.cyverse/clojure-commons "2.8.1-SNAPSHOT"]
                  [org.cyverse/common-cfg "2.8.0"]
                  [org.cyverse/common-cli "2.8.0"]
-                 [org.cyverse/common-swagger-api "2.8.0"]
+                 [org.cyverse/common-swagger-api "2.8.1-SNAPSHOT"]
                  [org.cyverse/service-logging "2.8.0"]
-                 [ring/ring-core "1.4.0"]
-                 [ring/ring-jetty-adapter "1.4.0"]]
+                 [ring/ring-core "1.5.0"]
+                 [ring/ring-jetty-adapter "1.5.0"]]
   :eastwood {:exclude-namespaces [:test-paths]
              :linters [:wrong-arity :wrong-ns-form :wrong-pre-post :wrong-tag :misplaced-docstrings]}
   :plugins [[lein-ring "0.9.6"]
             [jonase/eastwood "0.2.3"]
             [test2junit "1.1.3"]]
-  :profiles {:dev {:resource-paths ["conf/test"]}}
-  ;; compojure-api route macros should not be AOT compiled:
-  ;; https://github.com/metosin/compojure-api/issues/135#issuecomment-121388539
-  ;; https://github.com/metosin/compojure-api/issues/102
-  :aot [#"iplant_groups.(?!routes).*"]
-  :main iplant_groups.core
+  :profiles {:dev {:resource-paths ["conf/test"]}
+             :uberjar {:aot :all}}
+  :main ^:skip-aot iplant_groups.core
   :ring {:handler iplant_groups.routes/app
          :init    iplant_groups.core/init-service
          :port    31310}
