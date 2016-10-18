@@ -2,6 +2,8 @@
   (:gen-class)
   (:require [iplant_groups.routes :as routes]
             [iplant_groups.util.config :as config]
+            [iplant_groups.events :as events]
+            [iplant_groups.amqp :as amqp]
             [me.raynes.fs :as fs]
             [clj-http.client :as http]
             [clojure.tools.logging :as log]
@@ -23,6 +25,12 @@
    ["-v" "--version" "Print out the version number."]
    ["-h" "--help"]])
 
+(defn listen-for-events
+  []
+  (let [exchange-cfg (events/exchange-config)
+        queue-cfg    (events/queue-config)]
+    (amqp/connect exchange-cfg queue-cfg {"events.iplant-groups.ping" events/ping-handler})))
+
 (defn run-jetty
   []
   (require 'ring.adapter.jetty)
@@ -34,5 +42,6 @@
   (tc/with-logging-context config/svc-info
     (let [{:keys [options arguments errors summary]} (ccli/handle-args config/svc-info args cli-options)]
       (init-service (:config options))
+      (.start (Thread. listen-for-events))
       (http/with-connection-pool {:timeout 5 :threads 10 :insecure? false :default-per-route 10}
         (run-jetty)))))
