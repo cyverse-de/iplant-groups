@@ -51,6 +51,41 @@
   [props config-valid configs]
   "iplant-groups.grouper.password" "notprod")
 
+(cc/defprop-optstr amqp-uri
+  "The URI to use to establish AMQP connections."
+  [props config-valid configs]
+  "iplant-groups.amqp.uri" "amqp://guest:guest@rabbit:5672/")
+
+(cc/defprop-optstr exchange-name
+  "The name of AMQP exchange to connect to."
+  [props config-valid configs]
+  "iplant-groups.amqp.exchange.name" "de")
+
+(cc/defprop-optboolean exchange-durable?
+  "Whether or not the AMQP exchange is durable."
+  [props config-valid configs]
+  "iplant-groups.amqp.exchange.durable" true)
+
+(cc/defprop-optboolean exchange-auto-delete?
+  "Whether or not the AMQP exchange is auto-deleted."
+  [props config-valid configs]
+  "iplant-groups.amqp.exchange.auto-delete" false)
+
+(cc/defprop-optstr queue-name
+  "The name of the AMQP queue that is used for clockwork."
+  [props config-valid configs]
+  "iplant-groups.amqp.queue.name" "events.iplant-groups.queue")
+
+(cc/defprop-optboolean queue-durable?
+  "Whether or not the AMQP queue is durable."
+  [props config-valid configs]
+  "iplant-groups.amqp.queue.durable" true)
+
+(cc/defprop-optboolean queue-auto-delete?
+  "Whether or not to delete the AMQP queue."
+  [props config-valid configs]
+  "iplant-groups.amqp.queue.auto-delete" false)
+
 (defn- validate-config
   "Validates the configuration settings after they've been loaded."
   []
