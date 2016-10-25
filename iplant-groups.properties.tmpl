@@ -1,0 +1,8 @@
+{{- with $base := (printf "configs/%s" (env "DE_ENV")) -}}
+{{ with $v := (key (printf "%s/grouper/base" $base)) }}iplant-groups.grouper.base-url = {{ $v }}{{ end }}
+{{ with $v := (key (printf "%s/grouper/api-version" $base)) }}iplant-groups.grouper.api-version = {{ $v }}{{ end }}
+{{ with $v := (key (printf "%s/grouper/user" $base)) }}iplant-groups.grouper.username = {{ $v }}{{ end }}
+{{ with $v := (key (printf "%s/grouper/pass" $base)) }}iplant-groups.grouper.password = {{ $v }}{{ end }}
+
+{{ with $v := (key (printf "%s/amqp/uri" $base)) }}iplant-groups.amqp.uri = {{ $v }}{{ end }} 
+{{- end -}}
