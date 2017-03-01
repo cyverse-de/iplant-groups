@@ -76,7 +76,7 @@
 (defn grouper-ok?
   []
   (try+
-    (http/get (str (curl/url (config/grouper-base) "status")) {:query-params {:diagnosticType "sources"}})
+    (http/get (str (curl/url (config/grouper-base) "status")) {:query-params {:diagnosticType "sources"} :socket-timeout 10000 :conn-timeout 10000})
     true
     (catch Object err
       (log/warn "Grouper diagnostic check failed:" err)
