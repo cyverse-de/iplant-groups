@@ -18,7 +18,7 @@
                  [cheshire "5.6.3"]
                  [clj-http "2.0.0"]
                  [clj-time "0.12.0"]
-                 [com.cemerick/url "0.1.1"]
+                 [com.cemerick/url "0.1.1" :exclusions [com.cemerick/clojurescript.test]]
                  [medley "0.8.2"]
                  [metosin/compojure-api "1.1.8"]
                  [me.raynes/fs "1.4.6"]
