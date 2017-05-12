@@ -96,6 +96,14 @@
             :description "This endpoint allows callers to completely replace the members of a group."
             (ok (groups/replace-members group-name body params)))
 
+      (POST "/" []
+        :query       [params StandardUserQueryParams]
+        :body        [body (describe GroupMembersUpdate "The list of group member IDs to add.")]
+        :return      GroupMembersUpdateResponse
+        :summary     "Add Group Members"
+        :description "This endpoint allows callers to add multiple members to a group."
+        (ok (groups/add-members group-name body params)))
+
       (context "/:subject-id" []
         :path-params [subject-id :- SubjectIdPathParam]
 
