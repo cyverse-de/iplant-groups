@@ -268,14 +268,25 @@
                        :WsGetMembersResults)]
       [(:wsSubjects (first (:results response))) (:subjectAttributeNames response)])))
 
-;; Replace all group members.
+;; General functions for formatting group membership update requests.
 
-(defn- format-member-replacement-request
-  [username subject-ids]
+(defn- format-group-member-update-request
+  [replace-all? username subject-ids]
   {:WsRestAddMemberRequest
    {:actAsSubjectLookup (act-as-subject-lookup username)
-    :replaceAllExisting "T"
+    :replaceAllExisting (if replace-all? "T" "F")
     :subjectLookups     (subject-lookups subject-ids)}})
+
+(defn- format-group-member-removal-request
+  [username subject-ids]
+  {:WsRestDeleteMemberRequest
+   {:actAsSubjectLookup (act-as-subject-lookup username)
+    :subjectLookups     (subject-lookups subject-ids)}})
+
+;; Replace all group members.
+
+(def ^:private format-member-replacement-request
+  (partial format-group-member-update-request true))
 
 (defn replace-group-members
   [username group-name subject-ids]
@@ -284,14 +295,32 @@
       :WsAddMemberResults
       :results))
 
+;; Add multiple group members.
+
+(def ^:private format-multiple-member-addition-request
+  (partial format-group-member-update-request false))
+
+(defn add-group-members
+  [username group-name subject-ids]
+  (-> (format-multiple-member-addition-request username subject-ids)
+      (grouper-put-no-exceptions "groups" group-name "members")
+      :WsAddMemberResults
+      :results))
+
+;; Remove multiple group members.
+
+(defn remove-group-members
+  [username group-name subject-ids]
+  (-> (format-group-member-removal-request username subject-ids)
+      (grouper-put-no-exceptions "groups" group-name "members")
+      :WsDeleteMemberResults
+      :results))
+
 ;; Add group member.
 
 (defn- format-member-addition-request
   [username subject-id]
-  {:WsRestAddMemberRequest
-   {:actAsSubjectLookup (act-as-subject-lookup username)
-    :replaceAllExisting "F"
-    :subjectLookups     (subject-lookups [subject-id])}})
+  (format-group-member-update-request false username [subject-id]))
 
 (defn add-group-member
   [username group-name subject-id]
@@ -301,16 +330,10 @@
 
 ;; Remove group member.
 
-(defn- format-member-removal-request
-  [username subject-id]
-  {:WsRestDeleteMemberRequest
-   {:actAsSubjectLookup (act-as-subject-lookup username)
-    :subjectLookups     (subject-lookups [subject-id])}})
-
 (defn remove-group-member
   [username group-name subject-id]
   (with-trap [default-error-handler]
-    (-> (format-member-removal-request username subject-id)
+    (-> (format-group-member-removal-request username [subject-id])
         (grouper-post "groups" group-name "members"))))
 
 ;; Folder search.
