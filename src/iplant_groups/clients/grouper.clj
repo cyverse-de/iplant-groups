@@ -307,6 +307,15 @@
       :WsAddMemberResults
       :results))
 
+;; Remove multiple group members.
+
+(defn remove-group-members
+  [username group-name subject-ids]
+  (-> (format-group-member-removal-request username subject-ids)
+      (grouper-put-no-exceptions "groups" group-name "members")
+      :WsDeleteMemberResults
+      :results))
+
 ;; Add group member.
 
 (defn- format-member-addition-request

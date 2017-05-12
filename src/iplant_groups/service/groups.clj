@@ -58,6 +58,12 @@
   {:results (mapv fmt/format-member-subject-update-response
                   (grouper/add-group-members user group-name members))})
 
+(defn remove-members
+  [group-name {:keys [members]} {:keys [user]}]
+  (grouper/remove-group-members user group-name members)
+  {:results (mapv fmt/format-member-subject-update-response
+                  (grouper/remove-group-members user group-name members))})
+
 (defn add-member
   [group-name subject-id {:keys [user]}]
   (grouper/add-group-member user group-name subject-id))
