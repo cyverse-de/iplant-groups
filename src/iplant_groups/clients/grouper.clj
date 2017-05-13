@@ -246,13 +246,27 @@
 ;; Group membership listings.
 
 (defn- group-membership-listing-error-handler
-  [group-name error-code {:keys [body] :as response}]
+  [group error-code {:keys [body] :as response}]
   (log/warn "Grouper request failed:" response)
   (let [body    (service/parse-json body)
         get-grc (fn [m] (-> m :WsGetMembersResults :results first :resultMetadata :resultCode))]
     (if (and (= error-code ce/ERR_REQUEST_FAILED) (= (get-grc body) "GROUP_NOT_FOUND"))
-      (service/not-found "group" group-name)
+      (service/not-found "group" group)
       (throw+ (build-error-object error-code body)))))
+
+(defn- format-group-member-by-id-listing-request
+  [username group-id]
+  {:WsRestGetMembersRequest
+   {:actAsSubjectLookup (act-as-subject-lookup username)
+    :wsGroupLookups     [{:uuid group-id}]}})
+
+(defn get-group-members-by-id
+  [username group-id]
+  (with-trap [(partial group-membership-listing-error-handler group-id)]
+    (let [response (-> (format-group-member-by-id-listing-request username group-id)
+                       (grouper-post "groups")
+                       :WsGetMembersResults)]
+      [(:wsSubjects (first (:results response))) (:subjectAttributeNames response)])))
 
 (defn- format-group-member-listing-request
   [username group-name]
