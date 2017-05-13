@@ -25,6 +25,16 @@
         :description "This endpoint allows adding a new group."
         (ok (groups/add-group body params)))
 
+  (context "/id/:group-id" []
+    :path-params [group-id :- GroupIdPathParam]
+
+    (GET "/members" []
+      :query       [params StandardUserQueryParams]
+      :return      GroupMembers
+      :summary     "List Group Members by Group ID"
+      :description "This endpoint allows callers to list the members of a single group."
+      (ok (groups/get-group-members-by-id group-id params))))
+
   (context "/:group-name" []
     :path-params [group-name :- GroupNamePathParam]
 

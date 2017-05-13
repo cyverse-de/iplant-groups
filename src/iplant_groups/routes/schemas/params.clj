@@ -6,6 +6,9 @@
 (def SubjectIdPathParam
   (describe String "The subject identifier."))
 
+(def GroupIdPathParam
+  (describe String "The internal group identifier."))
+
 (def GroupNamePathParam
   (describe String "The full group name."))
 
