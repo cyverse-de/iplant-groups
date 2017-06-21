@@ -13,6 +13,12 @@
 
 (def ^:private default-act-as-subject-id "GrouperSystem")
 
+(def ^:private all-group-privileges
+  ["view" "read" "update" "admin" "optin" "optout" "groupAttrRead" "groupAttrUpdate"])
+
+(def ^:private all-folder-privileges
+  ["create" "stem" "stemAttrRead" "stemAttrUpdate"])
+
 (defn- auth-params
   []
   (vector (config/grouper-username) (config/grouper-password)))
@@ -500,26 +506,26 @@
 ;; Add/remove group/folder privileges
 
 (defn- format-group-folder-privileges-add-remove-request
-  [entity-lookup allowed? username subject-id privilege-names]
+  [entity-lookup allowed? username subject-ids privilege-names]
   {:WsRestAssignGrouperPrivilegesRequest
    (assoc entity-lookup
      :actAsSubjectLookup (act-as-subject-lookup username)
      :clientVersion "v2_2_000"
      :privilegeNames privilege-names
      :allowed (if allowed? "T" "F")
-     :wsSubjectLookups [{:subjectId subject-id}])})
+     :wsSubjectLookups (vec (for [subject-id subject-ids] {:subjectId subject-id})))})
 
 (defn- format-group-privileges-add-remove-request
-  [allowed? username group-name subject-id privilege-names]
+  [allowed? username group-name subject-ids privilege-names]
   (format-group-folder-privileges-add-remove-request
     {:wsGroupLookup {:groupName group-name}}
-    allowed? username subject-id privilege-names))
+    allowed? username subject-ids privilege-names))
 
 (defn- format-folder-privileges-add-remove-request
-  [allowed? username folder-name subject-id privilege-names]
+  [allowed? username folder-name subject-ids privilege-names]
   (format-group-folder-privileges-add-remove-request
     {:wsStemLookup {:stemName folder-name}}
-    allowed? username subject-id privilege-names))
+    allowed? username subject-ids privilege-names))
 
 (defn- add-remove-group-folder-privileges
   [request-body]
@@ -529,30 +535,42 @@
       [(first (:results response)) (:subjectAttributeNames response)])))
 
 (defn- add-remove-group-privileges
-  [allowed? username group-name subject-id privilege-names]
+  [allowed? username group-name subject-ids privilege-names]
   (add-remove-group-folder-privileges
-    (format-group-privileges-add-remove-request allowed? username group-name subject-id privilege-names)))
+    (format-group-privileges-add-remove-request allowed? username group-name subject-ids privilege-names)))
 
 (defn- add-remove-folder-privileges
-  [allowed? username folder-name subject-id privilege-names]
+  [allowed? username folder-name subject-ids privilege-names]
   (add-remove-group-folder-privileges
-    (format-folder-privileges-add-remove-request allowed? username folder-name subject-id privilege-names)))
+    (format-folder-privileges-add-remove-request allowed? username folder-name subject-ids privilege-names)))
 
 (defn add-group-privileges
-  [username group-name subject-id privilege-names]
-  (add-remove-group-privileges true username group-name subject-id privilege-names))
+  [username group-name subject-ids privilege-names]
+  (add-remove-group-privileges true username group-name subject-ids privilege-names))
 
 (defn remove-group-privileges
-  [username group-name subject-id privilege-names]
-  (add-remove-group-privileges false username group-name subject-id privilege-names))
+  [username group-name subject-ids privilege-names]
+  (add-remove-group-privileges false username group-name subject-ids privilege-names))
+
+(defn update-group-privileges
+  [username group-name subject-ids privilege-names]
+  (remove-group-privileges username group-name subject-ids all-group-privileges)
+  (when (seq privilege-names)
+    (add-group-privileges username group-name subject-ids privilege-names)))
 
 (defn add-folder-privileges
-  [username folder-name subject-id privilege-names]
-  (add-remove-folder-privileges true username folder-name subject-id privilege-names))
+  [username folder-name subject-ids privilege-names]
+  (add-remove-folder-privileges true username folder-name subject-ids privilege-names))
 
 (defn remove-folder-privileges
-  [username folder-name subject-id privilege-names]
-  (add-remove-folder-privileges false username folder-name subject-id privilege-names))
+  [username folder-name subject-ids privilege-names]
+  (add-remove-folder-privileges false username folder-name subject-ids privilege-names))
+
+(defn update-folder-privileges
+  [username folder-name subject-ids privilege-names]
+  (remove-folder-privileges username folder-name subject-ids all-folder-privileges)
+  (when (seq privilege-names)
+    (add-folder-privileges username folder-name subject-ids privilege-names)))
 
 ;; Subject search.
 
