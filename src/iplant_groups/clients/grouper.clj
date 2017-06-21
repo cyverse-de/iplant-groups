@@ -506,9 +506,9 @@
 ;; Add/remove group/folder privileges
 
 (defn- format-group-folder-privileges-add-remove-request
-  [lookup-opts allowed? username subject-ids privilege-names]
+  [entity-lookup allowed? username subject-ids privilege-names]
   {:WsRestAssignGrouperPrivilegesRequest
-   (assoc lookup-opts
+   (assoc entity-lookup
      :actAsSubjectLookup (act-as-subject-lookup username)
      :clientVersion "v2_2_000"
      :privilegeNames privilege-names
