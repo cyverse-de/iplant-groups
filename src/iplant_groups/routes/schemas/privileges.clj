@@ -5,8 +5,22 @@
             [iplant_groups.routes.schemas.folder :as folder]
             [schema.core :as s]))
 
-(def ValidFolderPrivileges (s/enum "create" "stem" "stemAdmin" "stemAttrRead" "stemAttrUpdate"))
+(def ValidFolderPrivileges (s/enum "create" "stem" "stemAttrRead" "stemAttrUpdate"))
 (def ValidGroupPrivileges (s/enum "view" "read" "update" "admin" "optin" "optout" "groupAttrRead" "groupAttrUpdate"))
+
+(s/defschema GroupPrivilegeUpdate
+  {:subject_id (describe String "The subject ID.")
+   :privileges (describe [ValidGroupPrivileges] "The group privileges to assign.")})
+
+(s/defschema GroupPrivilegeUpdates
+  {:updates (describe [GroupPrivilegeUpdate] "The privilege updates to process.")})
+
+(s/defschema FolderPrivilegeUpdate
+  {:subject_id (describe String "The subject ID.")
+   :privileges (describe [ValidFolderPrivileges] "The folder privileges to assign.")})
+
+(s/defschema FolderPrivilegeUpdates
+  {:updates (describe [FolderPrivilegeUpdate] "The privilege updates to process.")})
 
 (s/defschema Privilege
   {:type

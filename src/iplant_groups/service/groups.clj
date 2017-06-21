@@ -33,14 +33,20 @@
   (let [group (grouper/add-group user type name display_extension description)]
     (fmt/format-group-with-detail group)))
 
+(defn update-group-privileges
+  [group-name {:keys [updates]} {:keys [user] :as params}]
+  (doseq [[privileges vs] (group-by (comp set :privileges) updates)]
+    (grouper/update-group-privileges user group-name (mapv :subject_id vs) privileges))
+  (get-group-privileges group-name params))
+
 (defn add-group-privilege
   [group-name subject-id privilege-name {:keys [user]}]
-  (let [[privilege attribute-names] (grouper/add-group-privileges user group-name subject-id [privilege-name])]
+  (let [[privilege attribute-names] (grouper/add-group-privileges user group-name [subject-id] [privilege-name])]
     (fmt/format-privilege attribute-names privilege :wsSubject)))
 
 (defn remove-group-privilege
   [group-name subject-id privilege-name {:keys [user]}]
-  (let [[privilege attribute-names] (grouper/remove-group-privileges user group-name subject-id [privilege-name])]
+  (let [[privilege attribute-names] (grouper/remove-group-privileges user group-name [subject-id] [privilege-name])]
     (fmt/format-privilege attribute-names privilege :wsSubject)))
 
 (defn update-group

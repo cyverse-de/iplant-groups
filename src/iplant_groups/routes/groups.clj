@@ -70,6 +70,14 @@
         group."
         (ok (groups/get-group-privileges group-name params)))
 
+      (POST "/" []
+        :query       [params StandardUserQueryParams]
+        :body        [body (describe GroupPrivilegeUpdates "The privilege updates to process.")]
+        :return      GroupPrivileges
+        :summary     "Update Group Privileges"
+        :description "This endpoint allows callers to update the privileges for a group."
+        (ok (groups/update-group-privileges group-name body params)))
+
       (context "/:subject-id/:privilege-name" []
         :path-params [subject-id :- SubjectIdPathParam
                       privilege-name :- ValidGroupPrivileges]

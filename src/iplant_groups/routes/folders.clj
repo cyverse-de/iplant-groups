@@ -58,6 +58,14 @@
         folder."
         (ok (folders/get-folder-privileges folder-name params)))
 
+      (POST "/" []
+        :query       [params StandardUserQueryParams]
+        :body        [body (describe FolderPrivilegeUpdates "The privilege updates to process.")]
+        :return      FolderPrivileges
+        :summary     "Update Folder Privileges"
+        :description "This endpoint allows callers to update the privileges for a folder."
+        (ok (folders/update-folder-privileges folder-name body params)))
+
       (context "/:subject-id/:privilege-name" []
         :path-params [subject-id :- SubjectIdPathParam
                       privilege-name :- ValidFolderPrivileges]
