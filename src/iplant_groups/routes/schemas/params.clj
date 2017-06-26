@@ -18,6 +18,11 @@
 (def AttributeNamePathParam
   (describe String "The full attribute name."))
 
+(s/defschema PrivilegeUpdateParams
+  (assoc StandardUserQueryParams
+    (s/optional-key :replace)
+    (describe Boolean "True if existing privileges should be replaced.")))
+
 (s/defschema SearchParams
   (assoc StandardUserQueryParams
     :search (describe NonBlankString "The partial name of the entity to search for.")))

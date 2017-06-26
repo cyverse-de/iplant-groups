@@ -553,8 +553,9 @@
   (add-remove-group-privileges false username group-name subject-ids privilege-names))
 
 (defn update-group-privileges
-  [username group-name subject-ids privilege-names]
-  (remove-group-privileges username group-name subject-ids all-group-privileges)
+  [username replace? group-name subject-ids privilege-names]
+  (when replace?
+    (remove-group-privileges username group-name subject-ids all-group-privileges))
   (when (seq privilege-names)
     (add-group-privileges username group-name subject-ids privilege-names)))
 
