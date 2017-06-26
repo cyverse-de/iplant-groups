@@ -78,6 +78,14 @@
         :description "This endpoint allows callers to update the privileges for a group."
         (ok (groups/update-group-privileges group-name body params)))
 
+      (POST "/deleter" []
+        :query       [params StandardUserQueryParams]
+        :body        [body (describe GroupPrivilegeRemovals "The privilege updates to process.")]
+        :return      GroupPrivileges
+        :summary     "Remove Group Privileges"
+        :description "This endpoint allows callers to remove group privileges."
+        (ok (groups/remove-group-privileges group-name body params)))
+
       (context "/:subject-id/:privilege-name" []
         :path-params [subject-id :- SubjectIdPathParam
                       privilege-name :- ValidGroupPrivileges]
