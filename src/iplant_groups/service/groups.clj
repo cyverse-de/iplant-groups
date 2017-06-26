@@ -34,9 +34,9 @@
     (fmt/format-group-with-detail group)))
 
 (defn update-group-privileges
-  [group-name {:keys [updates]} {:keys [user] :as params}]
+  [group-name {:keys [updates]} {:keys [user replace] :or {replace true} :as params}]
   (doseq [[privileges vs] (group-by (comp set :privileges) updates)]
-    (grouper/update-group-privileges user group-name (mapv :subject_id vs) privileges))
+    (grouper/update-group-privileges user replace group-name (mapv :subject_id vs) privileges))
   (get-group-privileges group-name params))
 
 (defn add-group-privilege

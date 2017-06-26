@@ -71,7 +71,7 @@
         (ok (groups/get-group-privileges group-name params)))
 
       (POST "/" []
-        :query       [params StandardUserQueryParams]
+        :query       [params PrivilegeUpdateParams]
         :body        [body (describe GroupPrivilegeUpdates "The privilege updates to process.")]
         :return      GroupPrivileges
         :summary     "Update Group Privileges"
