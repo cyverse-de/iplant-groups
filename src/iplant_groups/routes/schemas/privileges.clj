@@ -15,6 +15,13 @@
 (s/defschema GroupPrivilegeUpdates
   {:updates (describe [GroupPrivilegeUpdate] "The privilege updates to process.")})
 
+(s/defschema GroupPrivilegeRemoval
+  {:subject_id (describe String "The subject ID.")
+   :privileges (describe [ValidGroupPrivileges] "The group privileges to remove.")})
+
+(s/defschema GroupPrivilegeRemovals
+  {:updates (describe [GroupPrivilegeRemoval] "The privilege updates to process.")})
+
 (s/defschema FolderPrivilegeUpdate
   {:subject_id (describe String "The subject ID.")
    :privileges (describe [ValidFolderPrivileges] "The folder privileges to assign.")})

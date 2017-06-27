@@ -39,6 +39,12 @@
     (grouper/update-group-privileges user replace group-name (mapv :subject_id vs) privileges))
   (get-group-privileges group-name params))
 
+(defn remove-group-privileges
+  [group-name {:keys [updates]} {:keys [user] :as params}]
+  (doseq [[privileges vs] (group-by (comp set :privileges) updates)]
+    (grouper/remove-group-privileges user group-name (mapv :subject_id vs) privileges))
+  (get-group-privileges group-name params))
+
 (defn add-group-privilege
   [group-name subject-id privilege-name {:keys [user]}]
   (let [[privilege attribute-names] (grouper/add-group-privileges user group-name [subject-id] [privilege-name])]
