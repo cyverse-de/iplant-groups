@@ -201,5 +201,6 @@
   [{result-metadata :resultMetadata subject :wsSubject}]
   (->> {:success      (= (:success result-metadata) "T")
         :subject_id   (:id subject)
+        :source_id    (:sourceId subject)
         :subject_name (:name subject)}
        (remove-vals nil?)))
