@@ -101,6 +101,9 @@
    :subject_id
    (describe NonBlankString "The subject ID.")
 
+   :source_id
+   (describe NonBlankString "The subject source ID.")
+
    (s/optional-key :subject_name)
    (describe NonBlankString "The subject name.")})
 
