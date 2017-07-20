@@ -578,8 +578,10 @@
 (defn- format-subject-search-request
   [username search-string]
   {:WsRestGetSubjectsRequest
-   {:actAsSubjectLookup (act-as-subject-lookup username)
-    :searchString       search-string}})
+   {:actAsSubjectLookup   (act-as-subject-lookup username)
+    :includeGroupDetail   "T"
+    :includeSubjectDetail "T"
+    :searchString         search-string}})
 
 (defn subject-search
   [username search-string]
@@ -598,8 +600,10 @@
 (defn- format-subject-id-lookup-request
   [username subject-id]
   {:WsRestGetSubjectsRequest
-   {:actAsSubjectLookup (act-as-subject-lookup username)
-    :wsSubjectLookups   [(subject-id-lookup subject-id)]}})
+   {:actAsSubjectLookup   (act-as-subject-lookup username)
+    :includeGroupDetail   "T"
+    :includeSubjectDetail "T"
+    :wsSubjectLookups     [(subject-id-lookup subject-id)]}})
 
 (defn get-subject
   [username subject-id]
