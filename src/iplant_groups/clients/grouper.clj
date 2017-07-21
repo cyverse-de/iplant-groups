@@ -263,8 +263,10 @@
 (defn- format-group-member-by-id-listing-request
   [username group-id]
   {:WsRestGetMembersRequest
-   {:actAsSubjectLookup (act-as-subject-lookup username)
-    :wsGroupLookups     [{:uuid group-id}]}})
+   {:actAsSubjectLookup   (act-as-subject-lookup username)
+    :includeSubjectDetail "T"
+    :includeGroupDetail   "T"
+    :wsGroupLookups       [{:uuid group-id}]}})
 
 (defn get-group-members-by-id
   [username group-id]
@@ -277,8 +279,10 @@
 (defn- format-group-member-listing-request
   [username group-name]
   {:WsRestGetMembersRequest
-   {:actAsSubjectLookup (act-as-subject-lookup username)
-    :wsGroupLookups     [{:groupName group-name}]}})
+   {:actAsSubjectLookup   (act-as-subject-lookup username)
+    :includeSubjectDetail "T"
+    :includeGroupDetail   "T"
+    :wsGroupLookups       [{:groupName group-name}]}})
 
 (defn get-group-members
   [username group-name]
