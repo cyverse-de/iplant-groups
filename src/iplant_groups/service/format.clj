@@ -91,16 +91,17 @@
     "SUBJECT_NOT_FOUND" (not-found subject)
     (let [known-keys #{"mail" "givenName" "sn" "o" "name" "description"}
           known-mappings (keep-indexed #(if (contains? known-keys %2) [%2 %1]) attribute-names)
-          known-key-indexes (into {} known-mappings)]
+          known-key-indexes (into {} known-mappings)
+          get-attribute (fn [k] (some->> (get known-key-indexes k) (nth (:attributeValues subject))))]
       (->> {:attribute_values  (keep-indexed #(if (not (contains? (set (map second known-mappings)) %1)) %2)
                                              (:attributeValues subject))
             :id                (:id subject)
             :name              (:name subject)
-            :first_name        (nth (:attributeValues subject) (get known-key-indexes "givenName"))
-            :last_name         (nth (:attributeValues subject) (get known-key-indexes "sn"))
-            :email             (nth (:attributeValues subject) (get known-key-indexes "mail"))
-            :institution       (nth (:attributeValues subject) (get known-key-indexes "o"))
-            :description       (nth (:attributeValues subject) (get known-key-indexes "description"))
+            :first_name        (get-attribute "givenName")
+            :last_name         (get-attribute "sn")
+            :email             (get-attribute "mail")
+            :institution       (get-attribute "o")
+            :description       (get-attribute "description")
             :source_id         (:sourceId subject)}
            (remove-vals nil?)
            (remove-vals empty?)))))
