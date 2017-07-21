@@ -488,6 +488,8 @@
                          entity-type)]
     {:WsRestGetGrouperPrivilegesLiteRequest
      {:actAsSubjectId username
+      :includeSubjectDetail "T"
+      :includeGroupDetail   "T"
       name-key group-or-folder-name}}
     (throw+ {:type :clojure-commons.exception/bad-request :entity-type entity-type})))
 
@@ -514,6 +516,8 @@
   {:WsRestAssignGrouperPrivilegesRequest
    (assoc entity-lookup
      :actAsSubjectLookup (act-as-subject-lookup username)
+     :includeSubjectDetail "T"
+     :includeGroupDetail   "T"
      :clientVersion "v2_2_000"
      :privilegeNames privilege-names
      :allowed (if allowed? "T" "F")
