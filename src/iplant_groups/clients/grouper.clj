@@ -264,6 +264,7 @@
   [username group-id]
   {:WsRestGetMembersRequest
    {:actAsSubjectLookup   (act-as-subject-lookup username)
+    :memberFilter         "Immediate"
     :includeSubjectDetail "T"
     :includeGroupDetail   "T"
     :wsGroupLookups       [{:uuid group-id}]}})
@@ -280,6 +281,7 @@
   [username group-name]
   {:WsRestGetMembersRequest
    {:actAsSubjectLookup   (act-as-subject-lookup username)
+    :memberFilter         "Immediate"
     :includeSubjectDetail "T"
     :includeGroupDetail   "T"
     :wsGroupLookups       [{:groupName group-name}]}})
