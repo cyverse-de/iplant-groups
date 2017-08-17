@@ -484,32 +484,35 @@
 
 ;; This is only available as a Lite request; ActAsSubject works differently.
 (defn- format-group-folder-privileges-lookup-request
-  [entity-type username group-or-folder-name]
-  (if-let [name-key (get {:group :groupName
+  [entity-type username group-or-folder-name params]
+  (if-let [name-key (get {:group  :groupName
                           :folder :stemName}
                          entity-type)]
     {:WsRestGetGrouperPrivilegesLiteRequest
-     {:actAsSubjectId username
-      :includeSubjectDetail "T"
-      :includeGroupDetail   "T"
-      name-key group-or-folder-name}}
+     (remove-vals nil? {:actAsSubjectId       username
+                        :includeSubjectDetail "T"
+                        :includeGroupDetail   "T"
+                        name-key              group-or-folder-name
+                        :subjectId            (:subject-id params)
+                        :subjectSourceId      (:subject-source-id params)
+                        :privilegeName        (:privilege params)})}
     (throw+ {:type :clojure-commons.exception/bad-request :entity-type entity-type})))
 
 (defn- get-group-folder-privileges
-  [entity-type username group-or-folder-name]
+  [entity-type username name params]
   (with-trap [default-error-handler]
-    (let [response (-> (format-group-folder-privileges-lookup-request entity-type username group-or-folder-name)
+    (let [response (-> (format-group-folder-privileges-lookup-request entity-type username name params)
                        (grouper-post "grouperPrivileges")
                        :WsGetGrouperPrivilegesLiteResult)]
-      [(:privilegeResults response) (:subjectAttributeNames response)])))
+      (log/spy :warn [(:privilegeResults response) (:subjectAttributeNames response)]))))
 
 (defn get-group-privileges
-  [username group-name]
-  (get-group-folder-privileges :group username group-name))
+  [username group-name & [params]]
+  (get-group-folder-privileges :group username group-name params))
 
 (defn get-folder-privileges
-  [username folder-name]
-  (get-group-folder-privileges :folder username folder-name))
+  [username folder-name & [params]]
+  (get-group-folder-privileges :folder username folder-name params))
 
 ;; Add/remove group/folder privileges
 

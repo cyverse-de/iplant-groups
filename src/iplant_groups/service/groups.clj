@@ -24,8 +24,8 @@
     {:members (mapv #(fmt/format-subject attribute-names %) subjects)}))
 
 (defn get-group-privileges
-  [group-name {:keys [user]}]
-  (let [[privileges attribute-names] (grouper/get-group-privileges user group-name)]
+  [group-name {:keys [user] :as params}]
+  (let [[privileges attribute-names] (grouper/get-group-privileges user group-name params)]
     {:privileges (mapv #(fmt/format-privilege attribute-names %) privileges)}))
 
 (defn add-group

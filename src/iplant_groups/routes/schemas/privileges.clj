@@ -1,5 +1,5 @@
 (ns iplant_groups.routes.schemas.privileges
-  (:use [common-swagger-api.schema :only [describe]])
+  (:use [common-swagger-api.schema :only [describe StandardUserQueryParams NonBlankString]])
   (:require [iplant_groups.routes.schemas.subject :as subject]
             [iplant_groups.routes.schemas.group :as group]
             [iplant_groups.routes.schemas.folder :as folder]
@@ -7,6 +7,17 @@
 
 (def ValidFolderPrivileges (s/enum "create" "stem" "stemAttrRead" "stemAttrUpdate"))
 (def ValidGroupPrivileges (s/enum "view" "read" "update" "admin" "optin" "optout" "groupAttrRead" "groupAttrUpdate"))
+
+(s/defschema GroupPrivilegeSearchQueryParams
+  (assoc StandardUserQueryParams
+    (s/optional-key :privilege)
+    (describe ValidGroupPrivileges "The privilege name to search for.")
+
+    (s/optional-key :subject-id)
+    (describe NonBlankString "The subject ID to search for.")
+
+    (s/optional-key :subject-source-id)
+    (describe NonBlankString "The subject source ID to search for.")))
 
 (s/defschema GroupPrivilegeUpdate
   {:subject_id (describe String "The subject ID.")
