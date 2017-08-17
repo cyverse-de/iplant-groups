@@ -498,13 +498,20 @@
                         :privilegeName        (:privilege params)})}
     (throw+ {:type :clojure-commons.exception/bad-request :entity-type entity-type})))
 
+(defn- filter-privileges
+  [privileges {:keys [subject-source-id]}]
+  (if subject-source-id
+    (filter (fn [priv] (= (:sourceId (:wsSubject priv)) subject-source-id)) privileges)
+    privileges))
+
 (defn- get-group-folder-privileges
   [entity-type username name params]
   (with-trap [default-error-handler]
     (let [response (-> (format-group-folder-privileges-lookup-request entity-type username name params)
                        (grouper-post "grouperPrivileges")
                        :WsGetGrouperPrivilegesLiteResult)]
-      [(:privilegeResults response) (:subjectAttributeNames response)])))
+      [(filter-privileges (:privilegeResults response) params)
+       (:subjectAttributeNames response)])))
 
 (defn get-group-privileges
   [username group-name & [params]]
