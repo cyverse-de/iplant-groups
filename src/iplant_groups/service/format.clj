@@ -117,7 +117,7 @@
          :subject   (format-subject attribute-names (subject-key privilege))}
         (remove-vals nil?)))
   ([attribute-names privilege]
-   (format-privilege attribute-names privilege :ownerSubject)))
+   (format-privilege attribute-names privilege :wsSubject)))
 
 (defn format-attribute-name
   [attribute-name]

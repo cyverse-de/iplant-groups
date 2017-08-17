@@ -48,12 +48,12 @@
 (defn add-group-privilege
   [group-name subject-id privilege-name {:keys [user]}]
   (let [[privilege attribute-names] (grouper/add-group-privileges user group-name [subject-id] [privilege-name])]
-    (fmt/format-privilege attribute-names privilege :wsSubject)))
+    (fmt/format-privilege attribute-names privilege)))
 
 (defn remove-group-privilege
   [group-name subject-id privilege-name {:keys [user]}]
   (let [[privilege attribute-names] (grouper/remove-group-privileges user group-name [subject-id] [privilege-name])]
-    (fmt/format-privilege attribute-names privilege :wsSubject)))
+    (fmt/format-privilege attribute-names privilege)))
 
 (defn update-group
   [group-name {:keys [name description display_extension]} {:keys [user]}]

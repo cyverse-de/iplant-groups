@@ -504,7 +504,7 @@
     (let [response (-> (format-group-folder-privileges-lookup-request entity-type username name params)
                        (grouper-post "grouperPrivileges")
                        :WsGetGrouperPrivilegesLiteResult)]
-      (log/spy :warn [(:privilegeResults response) (:subjectAttributeNames response)]))))
+      [(:privilegeResults response) (:subjectAttributeNames response)])))
 
 (defn get-group-privileges
   [username group-name & [params]]
