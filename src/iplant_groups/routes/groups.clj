@@ -63,7 +63,7 @@
 
     (context "/privileges" []
       (GET "/" []
-        :query       [params StandardUserQueryParams]
+        :query       [params GroupPrivilegeSearchQueryParams]
         :return      GroupPrivileges
         :summary     "List Group Privileges"
         :description "This endpoint allows callers to list the privileges visible to the current user of a single

@@ -24,8 +24,8 @@
     {:members (mapv #(fmt/format-subject attribute-names %) subjects)}))
 
 (defn get-group-privileges
-  [group-name {:keys [user]}]
-  (let [[privileges attribute-names] (grouper/get-group-privileges user group-name)]
+  [group-name {:keys [user] :as params}]
+  (let [[privileges attribute-names] (grouper/get-group-privileges user group-name params)]
     {:privileges (mapv #(fmt/format-privilege attribute-names %) privileges)}))
 
 (defn add-group
@@ -48,12 +48,12 @@
 (defn add-group-privilege
   [group-name subject-id privilege-name {:keys [user]}]
   (let [[privilege attribute-names] (grouper/add-group-privileges user group-name [subject-id] [privilege-name])]
-    (fmt/format-privilege attribute-names privilege :wsSubject)))
+    (fmt/format-privilege attribute-names privilege)))
 
 (defn remove-group-privilege
   [group-name subject-id privilege-name {:keys [user]}]
   (let [[privilege attribute-names] (grouper/remove-group-privileges user group-name [subject-id] [privilege-name])]
-    (fmt/format-privilege attribute-names privilege :wsSubject)))
+    (fmt/format-privilege attribute-names privilege)))
 
 (defn update-group
   [group-name {:keys [name description display_extension]} {:keys [user]}]

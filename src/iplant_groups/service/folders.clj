@@ -26,12 +26,12 @@
 (defn add-folder-privilege
   [folder-name subject-id privilege-name {:keys [user]}]
   (let [[privilege attribute-names] (grouper/add-folder-privileges user folder-name [subject-id] [privilege-name])]
-    (fmt/format-privilege attribute-names privilege :wsSubject)))
+    (fmt/format-privilege attribute-names privilege)))
 
 (defn remove-folder-privilege
   [folder-name subject-id privilege-name {:keys [user]}]
   (let [[privilege attribute-names] (grouper/remove-folder-privileges user folder-name [subject-id] [privilege-name])]
-    (fmt/format-privilege attribute-names privilege :wsSubject)))
+    (fmt/format-privilege attribute-names privilege)))
 
 (defn update-folder-privileges
   [folder-name {:keys [updates]} {:keys [user] :as params}]
