@@ -498,11 +498,28 @@
                         :privilegeName        (:privilege params)})}
     (throw+ {:type :clojure-commons.exception/bad-request :entity-type entity-type})))
 
-(defn- filter-privileges
+(defn- filter-privileges-by-subject-source-id
   [privileges {:keys [subject-source-id]}]
   (if subject-source-id
     (filter (fn [priv] (= (:sourceId (:wsSubject priv)) subject-source-id)) privileges)
     privileges))
+
+(defn- filter-privileges-by-inheritance-level
+  [privileges {:keys [inheritance-level]}]
+  (cond
+    (= inheritance-level "immediate")
+    (filter (fn [priv] (= (:ownerSubject priv) (:wsSubject priv))) privileges)
+
+    (= inheritance-level "inherited")
+    (filter (fn [priv] (not= (:ownerSubject priv) (:wsSubject priv))) privileges)
+
+    :else
+    privileges))
+
+(defn- filter-privileges [privileges params]
+  (-> privileges
+      (filter-privileges-by-subject-source-id params)
+      (filter-privileges-by-inheritance-level params)))
 
 (defn- get-group-folder-privileges
   [entity-type username name params]
