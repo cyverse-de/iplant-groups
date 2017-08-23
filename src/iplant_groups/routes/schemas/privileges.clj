@@ -7,6 +7,7 @@
 
 (def ValidFolderPrivileges (s/enum "create" "stem" "stemAttrRead" "stemAttrUpdate"))
 (def ValidGroupPrivileges (s/enum "view" "read" "update" "admin" "optin" "optout" "groupAttrRead" "groupAttrUpdate"))
+(def PrivilegeInheritanceLevel (s/enum "immediate" "inherited"))
 
 (s/defschema GroupPrivilegeSearchQueryParams
   (assoc StandardUserQueryParams
@@ -17,7 +18,10 @@
     (describe NonBlankString "The subject ID to search for.")
 
     (s/optional-key :subject-source-id)
-    (describe NonBlankString "The subject source ID to search for.")))
+    (describe NonBlankString "The subject source ID to search for.")
+
+    (s/optional-key :inheritance-level)
+    (describe PrivilegeInheritanceLevel "Allows the results to be filtered by inheritance level.")))
 
 (s/defschema GroupPrivilegeUpdate
   {:subject_id (describe String "The subject ID.")
