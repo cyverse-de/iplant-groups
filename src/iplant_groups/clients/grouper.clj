@@ -4,6 +4,7 @@
   (:require [cemerick.url :as curl]
             [cheshire.core :as json]
             [clj-http.client :as http]
+            [clojure.set :as set]
             [clojure.tools.logging :as log]
             [clojure-commons.error-codes :as ce]
             [iplant_groups.util.config :as config]
@@ -14,10 +15,10 @@
 (def ^:private default-act-as-subject-id "GrouperSystem")
 
 (def ^:private all-group-privileges
-  ["view" "read" "update" "admin" "optin" "optout" "groupAttrRead" "groupAttrUpdate"])
+  #{"view" "read" "update" "admin" "optin" "optout" "groupAttrRead" "groupAttrUpdate"})
 
 (def ^:private all-folder-privileges
-  ["create" "stem" "stemAttrRead" "stemAttrUpdate"])
+  #{"create" "stem" "stemAttrRead" "stemAttrUpdate"})
 
 (defn- auth-params
   []
@@ -591,10 +592,12 @@
 
 (defn update-group-privileges
   [username replace? group-name subject-ids privilege-names]
-  (when replace?
-    (remove-group-privileges username group-name subject-ids all-group-privileges))
-  (when (seq privilege-names)
-    (add-group-privileges username group-name subject-ids privilege-names)))
+  (let [privs-to-add    (set privilege-names)
+        privs-to-remove (set/difference all-group-privileges privs-to-add)]
+    (when (seq privs-to-add)
+      (add-group-privileges username group-name subject-ids privs-to-add))
+    (when (and replace? (seq privs-to-remove))
+      (remove-group-privileges username group-name subject-ids privs-to-remove))))
 
 (defn add-folder-privileges
   [username folder-name subject-ids privilege-names]
