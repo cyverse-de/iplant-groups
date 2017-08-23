@@ -1,6 +1,7 @@
 (ns iplant_groups.service.folders
   (:require [iplant_groups.clients.grouper :as grouper]
             [iplant_groups.service.format :as fmt]
+            [iplant_groups.service.util :as util]
             [iplant_groups.util.service :as service]))
 
 (defn folder-search
@@ -30,11 +31,13 @@
 
 (defn remove-folder-privilege
   [folder-name subject-id privilege-name {:keys [user]}]
+  (util/verify-not-removing-own-privileges user [subject-id])
   (let [[privilege attribute-names] (grouper/remove-folder-privileges user folder-name [subject-id] [privilege-name])]
     (fmt/format-privilege attribute-names privilege)))
 
 (defn update-folder-privileges
   [folder-name {:keys [updates]} {:keys [user] :as params}]
+  (util/verify-not-removing-own-privileges user (map :subject_id updates))
   (doseq [[privileges vs] (group-by (comp set :privileges) updates)]
     (grouper/update-folder-privileges user folder-name (mapv :subject_id vs) privileges))
   (get-folder-privileges folder-name params))
