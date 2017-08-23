@@ -1,6 +1,7 @@
 (ns iplant_groups.service.groups
   (:require [iplant_groups.clients.grouper :as grouper]
             [iplant_groups.service.format :as fmt]
+            [iplant_groups.service.util :as util]
             [iplant_groups.util.service :as service]))
 
 (defn group-search
@@ -35,12 +36,14 @@
 
 (defn update-group-privileges
   [group-name {:keys [updates]} {:keys [user replace] :or {replace true} :as params}]
+  (when replace (util/verify-not-removing-own-privileges user (map :subject_id updates)))
   (doseq [[privileges vs] (group-by (comp set :privileges) updates)]
     (grouper/update-group-privileges user replace group-name (mapv :subject_id vs) privileges))
   (get-group-privileges group-name params))
 
 (defn remove-group-privileges
   [group-name {:keys [updates]} {:keys [user] :as params}]
+  (util/verify-not-removing-own-privileges user (map :subject_id updates))
   (doseq [[privileges vs] (group-by (comp set :privileges) updates)]
     (grouper/remove-group-privileges user group-name (mapv :subject_id vs) privileges))
   (get-group-privileges group-name params))
@@ -52,6 +55,7 @@
 
 (defn remove-group-privilege
   [group-name subject-id privilege-name {:keys [user]}]
+  (util/verify-not-removing-own-privileges user [subject-id])
   (let [[privilege attribute-names] (grouper/remove-group-privileges user group-name [subject-id] [privilege-name])]
     (fmt/format-privilege attribute-names privilege)))
 
