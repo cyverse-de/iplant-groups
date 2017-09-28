@@ -50,7 +50,7 @@
 (defn- grouper-uri
   [& components]
   (str (apply curl/url (config/grouper-base) "servicesRest" (config/grouper-api-version)
-              components)))
+              (mapv curl/url-encode components))))
 
 (defn- grouper-post
   [body & uri-parts]
