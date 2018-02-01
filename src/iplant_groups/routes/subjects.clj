@@ -14,6 +14,14 @@
     :description "This endpoint allows callers to search for subjects by name."
     (ok (subjects/subject-search params)))
 
+  (POST "/lookup" []
+    :return      SubjectList
+    :query       [params StandardUserQueryParams]
+    :body        [body SubjectIdList]
+    :summary     "Look Up Multiple Subject IDs"
+    :description "This endpoint allows callers to look up multiple subjects by ID in one API call."
+    (ok (subjects/lookup params body)))
+
   (GET "/:subject-id" []
     :path-params [subject-id :- SubjectIdPathParam]
     :query       [params StandardUserQueryParams]

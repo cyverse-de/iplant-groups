@@ -613,6 +613,30 @@
   (when (seq privilege-names)
     (add-folder-privileges username folder-name subject-ids privilege-names)))
 
+;; General subject functions.
+
+(defn- subject-id-lookup
+  [subject-id]
+  (remove-vals nil? {:subjectId subject-id}))
+
+;; Subject lookup.
+
+(defn- format-multi-subject-lookup-request
+  [username subject-ids]
+  {:WsRestGetSubjectsRequest
+   {:actAsSubjectLookup   (act-as-subject-lookup username)
+    :includeGroupDetail   "T"
+    :includeSubjectDetail "T"
+    :wsSubjectLookups     (map subject-id-lookup subject-ids)}})
+
+(defn look-up-subjects
+  [username subject-ids]
+  (with-trap [default-error-handler]
+    (let [response (-> (format-multi-subject-lookup-request username (set subject-ids))
+                       (grouper-post "subjects")
+                       :WsGetSubjectsResults)]
+      [(:wsSubjects response) (:subjectAttributeNames response)])))
+
 ;; Subject search.
 
 (defn- format-subject-search-request
@@ -632,10 +656,6 @@
       [(:wsSubjects response) (:subjectAttributeNames response)])))
 
 ;; Subject retrieval.
-
-(defn- subject-id-lookup
-  [subject-id]
-  (remove-vals nil? {:subjectId subject-id}))
 
 (defn- format-subject-id-lookup-request
   [username subject-id]
