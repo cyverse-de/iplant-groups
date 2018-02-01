@@ -5,6 +5,8 @@
             [clojure.string :as string]
             [clojure-commons.error-codes :as ce]))
 
+(def ^:private subject-not-found "SUBJECT_NOT_FOUND")
+
 (def ^:private timestamp-formatter (tf/formatter "yyyy/MM/dd HH:mm:ss.SSSSSS"))
 
 (defn timestamp-to-millis
@@ -85,26 +87,39 @@
           :id                (:uuid folder)}
          (remove-vals nil?))))
 
+(defn- format-subject*
+  [attribute-names subject]
+  (let [known-keys #{"mail" "givenName" "sn" "o" "name" "description"}
+        known-mappings (keep-indexed #(if (contains? known-keys %2) [%2 %1]) attribute-names)
+        known-key-indexes (into {} known-mappings)
+        get-attribute (fn [k] (some->> (get known-key-indexes k) (nth (:attributeValues subject))))]
+    (->> {:attribute_values  (keep-indexed #(if (not (contains? (set (map second known-mappings)) %1)) %2)
+                                           (:attributeValues subject))
+          :id                (:id subject)
+          :name              (:name subject)
+          :first_name        (get-attribute "givenName")
+          :last_name         (get-attribute "sn")
+          :email             (get-attribute "mail")
+          :institution       (get-attribute "o")
+          :description       (get-attribute "description")
+          :source_id         (:sourceId subject)}
+         (remove-vals nil?)
+         (remove-vals empty?))))
+
 (defn format-subject
   [attribute-names subject]
   (condp = (:resultCode subject)
-    "SUBJECT_NOT_FOUND" (not-found subject)
-    (let [known-keys #{"mail" "givenName" "sn" "o" "name" "description"}
-          known-mappings (keep-indexed #(if (contains? known-keys %2) [%2 %1]) attribute-names)
-          known-key-indexes (into {} known-mappings)
-          get-attribute (fn [k] (some->> (get known-key-indexes k) (nth (:attributeValues subject))))]
-      (->> {:attribute_values  (keep-indexed #(if (not (contains? (set (map second known-mappings)) %1)) %2)
-                                             (:attributeValues subject))
-            :id                (:id subject)
-            :name              (:name subject)
-            :first_name        (get-attribute "givenName")
-            :last_name         (get-attribute "sn")
-            :email             (get-attribute "mail")
-            :institution       (get-attribute "o")
-            :description       (get-attribute "description")
-            :source_id         (:sourceId subject)}
-           (remove-vals nil?)
-           (remove-vals empty?)))))
+    subject-not-found (not-found subject)
+    (format-subject* attribute-names subject)))
+
+(defn- format-subject-ignore-missing
+  [attribute-names subject]
+  (when-not (= (:resultCode subject) subject-not-found)
+    (format-subject* attribute-names subject)))
+
+(defn format-subjects-ignore-missing
+  [attribute-names subjects]
+  (remove nil? (mapv #(format-subject-ignore-missing attribute-names %) subjects)))
 
 (defn format-privilege
   ([attribute-names privilege subject-key]

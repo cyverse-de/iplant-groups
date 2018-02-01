@@ -5,7 +5,7 @@
 (defn lookup
   [{:keys [user]} {subject-ids :subject_ids}]
   (let [[subjects attribute-names] (grouper/look-up-subjects user subject-ids)]
-    {:subjects (mapv #(fmt/format-subject attribute-names %) subjects)}))
+    {:subjects (fmt/format-subjects-ignore-missing attribute-names subjects)}))
 
 (defn subject-search
   [{:keys [user search]}]
