@@ -33,3 +33,6 @@
 
 (s/defschema SubjectList
   {:subjects (describe [Subject] "The list of subjects in the result set.")})
+
+(s/defschema SubjectIdList
+  {:subject_ids (describe [String] "The list of subject IDs.")})

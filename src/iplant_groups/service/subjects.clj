@@ -2,6 +2,11 @@
   (:require [iplant_groups.clients.grouper :as grouper]
             [iplant_groups.service.format :as fmt]))
 
+(defn lookup
+  [{:keys [user]} {subject-ids :subject_ids}]
+  (let [[subjects attribute-names] (grouper/look-up-subjects user subject-ids)]
+    {:subjects (fmt/format-subjects-ignore-missing attribute-names subjects)}))
+
 (defn subject-search
   [{:keys [user search]}]
   (let [[subjects attribute-names] (grouper/subject-search user search)]

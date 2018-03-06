@@ -11,3 +11,5 @@ pom.xml.asc
 .hg/
 build.xml
 test2junit
+/.idea
+*.iml
