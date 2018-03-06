@@ -19,7 +19,8 @@
     :query       [params StandardUserQueryParams]
     :body        [body SubjectIdList]
     :summary     "Look Up Multiple Subject IDs"
-    :description "This endpoint allows callers to look up multiple subjects by ID in one API call."
+    :description "This endpoint allows callers to look up multiple subjects by ID in one API call.
+    Note: the response body will only contain the users that are found in the subject store."
     (ok (subjects/lookup params body)))
 
   (GET "/:subject-id" []
