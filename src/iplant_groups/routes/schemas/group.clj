@@ -1,7 +1,7 @@
-(ns iplant_groups.routes.schemas.group
+(ns iplant-groups.routes.schemas.group
   (:use [common-swagger-api.schema :only [describe NonBlankString ->optional-param]])
-  (:require [iplant_groups.routes.schemas.params :as params]
-            [iplant_groups.routes.schemas.subject :as subject]
+  (:require [iplant-groups.routes.schemas.params :as params]
+            [iplant-groups.routes.schemas.subject :as subject]
             [schema.core :as s]))
 
 (s/defschema BaseGroup

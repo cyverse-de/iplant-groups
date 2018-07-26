@@ -38,9 +38,9 @@
             [test2junit "1.1.3"]]
   :profiles {:dev {:resource-paths ["conf/test"]}
              :uberjar {:aot :all}}
-  :main ^:skip-aot iplant_groups.core
-  :ring {:handler iplant_groups.routes/app
-         :init    iplant_groups.core/init-service
+  :main ^:skip-aot iplant-groups.core
+  :ring {:handler iplant-groups.routes/app
+         :init    iplant-groups.core/init-service
          :port    31310}
   :uberjar-exclusions [#"(?i)META-INF/[^/]*[.](SF|DSA|RSA)"]
   :jvm-opts ["-Dlogback.configurationFile=/etc/iplant/de/logging/iplant-groups-logging.xml"])

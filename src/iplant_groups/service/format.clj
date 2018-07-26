@@ -1,4 +1,4 @@
-(ns iplant_groups.service.format
+(ns iplant-groups.service.format
   (:use [medley.core :only [remove-vals]]
         [slingshot.slingshot :only [throw+]])
   (:require [clj-time.format :as tf]

@@ -1,4 +1,4 @@
-(ns iplant_groups.service.util
+(ns iplant-groups.service.util
   (:require [clojure-commons.exception-util :as cxu]))
 
 (defn verify-not-removing-own-privileges [user subjects]

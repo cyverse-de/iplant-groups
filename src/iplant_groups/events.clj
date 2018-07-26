@@ -1,7 +1,7 @@
-(ns iplant_groups.events
+(ns iplant-groups.events
   (:require [clojure.tools.logging :as log]
-            [iplant_groups.util.config :as config]
-            [iplant_groups.amqp :as amqp]
+            [iplant-groups.util.config :as config]
+            [iplant-groups.amqp :as amqp]
             [langohr.basic :as lb])
   (:import [org.cyverse.events.ping PingMessages$Pong]
            [com.google.protobuf.util JsonFormat]))

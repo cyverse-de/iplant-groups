@@ -1,9 +1,9 @@
-(ns iplant_groups.core
+(ns iplant-groups.core
   (:gen-class)
-  (:require [iplant_groups.routes :as routes]
-            [iplant_groups.util.config :as config]
-            [iplant_groups.events :as events]
-            [iplant_groups.amqp :as amqp]
+  (:require [iplant-groups.routes :as routes]
+            [iplant-groups.util.config :as config]
+            [iplant-groups.events :as events]
+            [iplant-groups.amqp :as amqp]
             [me.raynes.fs :as fs]
             [clj-http.client :as http]
             [clojure.tools.logging :as log]

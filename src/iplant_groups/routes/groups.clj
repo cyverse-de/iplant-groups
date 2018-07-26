@@ -1,10 +1,10 @@
-(ns iplant_groups.routes.groups
+(ns iplant-groups.routes.groups
   (:use [common-swagger-api.schema]
-        [iplant_groups.routes.schemas.group]
-        [iplant_groups.routes.schemas.privileges]
-        [iplant_groups.routes.schemas.params]
+        [iplant-groups.routes.schemas.group]
+        [iplant-groups.routes.schemas.privileges]
+        [iplant-groups.routes.schemas.params]
         [ring.util.http-response :only [ok]])
-  (:require [iplant_groups.service.groups :as groups]))
+  (:require [iplant-groups.service.groups :as groups]))
 
 (defroutes groups
   (GET "/" []
@@ -29,7 +29,7 @@
     :path-params [group-id :- GroupIdPathParam]
 
     (GET "/members" []
-      :query       [params StandardUserQueryParams]
+      :query       [params GroupMemberListingQueryParams]
       :return      GroupMembers
       :summary     "List Group Members by Group ID"
       :description "This endpoint allows callers to list the members of a single group."
@@ -108,7 +108,7 @@
 
     (context "/members" []
       (GET "/" []
-        :query       [params StandardUserQueryParams]
+        :query       [params GroupMemberListingQueryParams]
         :return      GroupMembers
         :summary     "List Group Members"
         :description "This endpoint allows callers to list the members of a single group."

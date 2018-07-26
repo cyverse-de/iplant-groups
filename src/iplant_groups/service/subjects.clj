@@ -1,6 +1,6 @@
-(ns iplant_groups.service.subjects
-  (:require [iplant_groups.clients.grouper :as grouper]
-            [iplant_groups.service.format :as fmt]))
+(ns iplant-groups.service.subjects
+  (:require [iplant-groups.clients.grouper :as grouper]
+            [iplant-groups.service.format :as fmt]))
 
 (defn lookup
   [{:keys [user]} {subject-ids :subject_ids}]

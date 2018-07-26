@@ -1,6 +1,6 @@
-(ns iplant_groups.service.attributes
-  (:require [iplant_groups.clients.grouper :as grouper]
-            [iplant_groups.service.format :as fmt]))
+(ns iplant-groups.service.attributes
+  (:require [iplant-groups.clients.grouper :as grouper]
+            [iplant-groups.service.format :as fmt]))
 
 (defn permission-assignment-search
   [{:keys [user] :as params}]

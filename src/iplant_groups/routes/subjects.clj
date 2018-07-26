@@ -1,10 +1,10 @@
-(ns iplant_groups.routes.subjects
+(ns iplant-groups.routes.subjects
   (:use [common-swagger-api.schema]
-        [iplant_groups.routes.schemas.group]
-        [iplant_groups.routes.schemas.params]
-        [iplant_groups.routes.schemas.subject]
+        [iplant-groups.routes.schemas.group]
+        [iplant-groups.routes.schemas.params]
+        [iplant-groups.routes.schemas.subject]
         [ring.util.http-response :only [ok]])
-  (:require [iplant_groups.service.subjects :as subjects]))
+  (:require [iplant-groups.service.subjects :as subjects]))
 
 (defroutes subjects
   (GET "/" []

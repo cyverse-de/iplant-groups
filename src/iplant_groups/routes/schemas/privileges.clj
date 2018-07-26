@@ -1,8 +1,8 @@
-(ns iplant_groups.routes.schemas.privileges
+(ns iplant-groups.routes.schemas.privileges
   (:use [common-swagger-api.schema :only [describe StandardUserQueryParams NonBlankString]])
-  (:require [iplant_groups.routes.schemas.subject :as subject]
-            [iplant_groups.routes.schemas.group :as group]
-            [iplant_groups.routes.schemas.folder :as folder]
+  (:require [iplant-groups.routes.schemas.subject :as subject]
+            [iplant-groups.routes.schemas.group :as group]
+            [iplant-groups.routes.schemas.folder :as folder]
             [schema.core :as s]))
 
 (def ValidFolderPrivileges (s/enum "create" "stem" "stemAttrRead" "stemAttrUpdate"))

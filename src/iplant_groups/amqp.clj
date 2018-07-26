@@ -1,6 +1,6 @@
-(ns iplant_groups.amqp
+(ns iplant-groups.amqp
   (:require [clojure.tools.logging :as log]
-            [iplant_groups.util.config :as config]
+            [iplant-groups.util.config :as config]
             [langohr.core :as rmq]
             [langohr.channel :as lch]
             [langohr.queue :as lq]

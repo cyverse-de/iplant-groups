@@ -1,4 +1,4 @@
-(ns iplant_groups.routes
+(ns iplant-groups.routes
   (:use [service-logging.middleware :only [wrap-logging add-user-to-context clean-context]]
         [clojure-commons.query-params :only [wrap-query-params]]
         [compojure.core :only [wrap-routes]]
@@ -6,12 +6,12 @@
         [ring.middleware.keyword-params :only [wrap-keyword-params]])
   (:require [compojure.route :as route]
             [cheshire.core :as json]
-            [iplant_groups.routes.folders :as folder-routes]
-            [iplant_groups.routes.groups :as group-routes]
-            [iplant_groups.routes.status :as status-routes]
-            [iplant_groups.routes.subjects :as subject-routes]
-            [iplant_groups.routes.attributes :as attribute-routes]
-            [iplant_groups.util.config :as config]
+            [iplant-groups.routes.folders :as folder-routes]
+            [iplant-groups.routes.groups :as group-routes]
+            [iplant-groups.routes.status :as status-routes]
+            [iplant-groups.routes.subjects :as subject-routes]
+            [iplant-groups.routes.attributes :as attribute-routes]
+            [iplant-groups.util.config :as config]
             [clojure-commons.exception :as cx]))
 
 (defapi app

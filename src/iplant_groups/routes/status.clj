@@ -1,10 +1,10 @@
-(ns iplant_groups.routes.status
+(ns iplant-groups.routes.status
   (:use [common-swagger-api.schema]
-        [iplant_groups.routes.schemas.status]
+        [iplant-groups.routes.schemas.status]
         [ring.util.http-response :only [ok internal-server-error]])
   (:require [clojure-commons.service :as commons-service]
-            [iplant_groups.clients.grouper :as grouper]
-            [iplant_groups.util.config :as config]))
+            [iplant-groups.clients.grouper :as grouper]
+            [iplant-groups.util.config :as config]))
 
 (defroutes status
   (GET "/" [:as {:keys [server-name server-port]}]

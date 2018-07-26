@@ -1,4 +1,4 @@
-(ns iplant_groups.routes.schemas.params
+(ns iplant-groups.routes.schemas.params
   (:use [common-swagger-api.schema :only [describe NonBlankString StandardUserQueryParams]])
   (:require [clojure.string :as string]
             [schema.core :as s]))
@@ -18,6 +18,9 @@
 (def AttributeNamePathParam
   (describe String "The full attribute name."))
 
+(def GroupMemberFilter
+  (s/enum "all" "effective" "immediate" "composite"))
+
 (s/defschema PrivilegeUpdateParams
   (assoc StandardUserQueryParams
     (s/optional-key :replace)
@@ -31,6 +34,11 @@
   (assoc SearchParams
     (s/optional-key :folder)
     (describe NonBlankString "The name of the folder to search for.")))
+
+(s/defschema GroupMemberListingQueryParams
+  (assoc StandardUserQueryParams
+    (s/optional-key :member-filter)
+    (describe GroupMemberFilter "The subset of members to include in the result.")))
 
 (s/defschema GroupsForSubjectParams
   (assoc StandardUserQueryParams
