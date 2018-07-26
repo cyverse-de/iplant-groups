@@ -7,7 +7,7 @@ ENV PROGRAM=iplant-groups
 VOLUME ["/etc/iplant/de"]
 
 COPY project.clj /usr/src/app/
-RUN lein deps
+RUN lein do clean, deps
 
 COPY conf/main/logback.xml /usr/src/app/
 COPY . /usr/src/app
