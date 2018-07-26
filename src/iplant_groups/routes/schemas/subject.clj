@@ -1,6 +1,6 @@
-(ns iplant_groups.routes.schemas.subject
+(ns iplant-groups.routes.schemas.subject
   (:use [common-swagger-api.schema :only [describe]])
-  (:require [iplant_groups.routes.schemas.params :as params]
+  (:require [iplant-groups.routes.schemas.params :as params]
             [schema.core :as s]))
 
 (s/defschema Subject

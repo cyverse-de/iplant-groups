@@ -1,10 +1,10 @@
-(ns iplant_groups.core-test
+(ns iplant-groups.core-test
   (:use [clojure.test]
-        [iplant_groups.core])
-  (:require [iplant_groups.util.config :as config]))
+        [iplant-groups.core])
+  (:require [iplant-groups.util.config :as config]))
 
 (deftest test-default-config
-  (require 'iplant_groups.util.config :reload)
+  (require 'iplant-groups.util.config :reload)
   (config/load-config-from-file "conf/test/empty.properties")
   (testing "default configuration settings"
     (is (= (config/listen-port) 60000))

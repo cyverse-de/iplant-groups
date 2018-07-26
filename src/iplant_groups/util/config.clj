@@ -1,4 +1,4 @@
-(ns iplant_groups.util.config
+(ns iplant-groups.util.config
   (:use [slingshot.slingshot :only [throw+]])
   (:require [clojure-commons.config :as cc]
             [clojure-commons.error-codes :as ce]))

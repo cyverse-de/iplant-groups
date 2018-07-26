@@ -1,4 +1,4 @@
-(ns iplant_groups.routes.schemas.params
+(ns iplant-groups.routes.schemas.params
   (:use [common-swagger-api.schema :only [describe NonBlankString StandardUserQueryParams]])
   (:require [clojure.string :as string]
             [schema.core :as s]))

@@ -1,10 +1,10 @@
-(ns iplant_groups.routes.folders
+(ns iplant-groups.routes.folders
   (:use [common-swagger-api.schema]
-        [iplant_groups.routes.schemas.folder]
-        [iplant_groups.routes.schemas.privileges]
-        [iplant_groups.routes.schemas.params]
+        [iplant-groups.routes.schemas.folder]
+        [iplant-groups.routes.schemas.privileges]
+        [iplant-groups.routes.schemas.params]
         [ring.util.http-response :only [ok]])
-  (:require [iplant_groups.service.folders :as folders]))
+  (:require [iplant-groups.service.folders :as folders]))
 
 (defroutes folders
   (GET "/" []

@@ -6,7 +6,7 @@
     </appender>
 
 
-  <logger name="iplant_groups" level="DEBUG" />
+  <logger name="iplant-groups" level="DEBUG" />
   <!-- Configuration Logging -->
   <logger name="clojure-commons.config" level="INFO"/>
   <!-- Request Logging -->

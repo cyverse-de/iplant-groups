@@ -1,4 +1,4 @@
-(ns iplant_groups.clients.grouper
+(ns iplant-groups.clients.grouper
   (:use [medley.core :only [distinct-by map-kv remove-vals]]
         [slingshot.slingshot :only [throw+ try+]])
   (:require [cemerick.url :as curl]
@@ -7,8 +7,8 @@
             [clojure.set :as set]
             [clojure.tools.logging :as log]
             [clojure-commons.error-codes :as ce]
-            [iplant_groups.util.config :as config]
-            [iplant_groups.util.service :as service]))
+            [iplant-groups.util.config :as config]
+            [iplant-groups.util.service :as service]))
 
 (def ^:private content-type "text/x-json")
 

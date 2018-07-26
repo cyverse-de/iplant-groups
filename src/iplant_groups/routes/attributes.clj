@@ -1,9 +1,9 @@
-(ns iplant_groups.routes.attributes
+(ns iplant-groups.routes.attributes
   (:use [common-swagger-api.schema]
-        [iplant_groups.routes.schemas.params]
-        [iplant_groups.routes.schemas.attribute]
+        [iplant-groups.routes.schemas.params]
+        [iplant-groups.routes.schemas.attribute]
         [ring.util.http-response :only [ok]])
-  (:require [iplant_groups.service.attributes :as attributes]))
+  (:require [iplant-groups.service.attributes :as attributes]))
 
 (defroutes attributes
   (GET "/" []

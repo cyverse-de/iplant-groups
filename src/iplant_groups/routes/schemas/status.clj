@@ -1,6 +1,6 @@
-(ns iplant_groups.routes.schemas.status
+(ns iplant-groups.routes.schemas.status
   (:use [common-swagger-api.schema :only [describe NonBlankString StatusResponse]]
-        [iplant_groups.routes.schemas.params])
+        [iplant-groups.routes.schemas.params])
   (:require [schema.core :as s]))
 
 (s/defschema IplantGroupsStatusResponse
