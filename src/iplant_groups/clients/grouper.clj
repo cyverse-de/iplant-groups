@@ -5,6 +5,7 @@
             [cheshire.core :as json]
             [clj-http.client :as http]
             [clojure.set :as set]
+            [clojure.string :as string]
             [clojure.tools.logging :as log]
             [clojure-commons.error-codes :as ce]
             [iplant-groups.util.config :as config]
@@ -264,36 +265,39 @@
       (service/not-found "group" group)
       (throw+ (build-error-object error-code body)))))
 
+(defn- format-member-filter [member-filter]
+  (string/capitalize (or member-filter "immediate")))
+
 (defn- format-group-member-by-id-listing-request
-  [username group-id]
+  [username group-id member-filter]
   {:WsRestGetMembersRequest
    {:actAsSubjectLookup   (act-as-subject-lookup username)
-    :memberFilter         "Immediate"
+    :memberFilter         (format-member-filter member-filter)
     :includeSubjectDetail "T"
     :includeGroupDetail   "T"
     :wsGroupLookups       [{:uuid group-id}]}})
 
 (defn get-group-members-by-id
-  [username group-id]
+  [username group-id member-filter]
   (with-trap [(partial group-membership-listing-error-handler group-id)]
-    (let [response (-> (format-group-member-by-id-listing-request username group-id)
+    (let [response (-> (format-group-member-by-id-listing-request username group-id member-filter)
                        (grouper-post "groups")
                        :WsGetMembersResults)]
       [(:wsSubjects (first (:results response))) (:subjectAttributeNames response)])))
 
 (defn- format-group-member-listing-request
-  [username group-name]
+  [username group-name member-filter]
   {:WsRestGetMembersRequest
    {:actAsSubjectLookup   (act-as-subject-lookup username)
-    :memberFilter         "Immediate"
+    :memberFilter         (format-member-filter member-filter)
     :includeSubjectDetail "T"
     :includeGroupDetail   "T"
     :wsGroupLookups       [{:groupName group-name}]}})
 
 (defn get-group-members
-  [username group-name]
+  [username group-name member-filter]
   (with-trap [(partial group-membership-listing-error-handler group-name)]
-    (let [response (-> (format-group-member-listing-request username group-name)
+    (let [response (-> (format-group-member-listing-request username group-name member-filter)
                        (grouper-post "groups")
                        :WsGetMembersResults)]
       [(:wsSubjects (first (:results response))) (:subjectAttributeNames response)])))

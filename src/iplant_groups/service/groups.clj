@@ -15,13 +15,13 @@
     (service/not-found "group" group-name)))
 
 (defn get-group-members-by-id
-  [group-id {:keys [user]}]
-  (let [[subjects attribute-names] (grouper/get-group-members-by-id user group-id)]
+  [group-id {:keys [user member-filter]}]
+  (let [[subjects attribute-names] (grouper/get-group-members-by-id user group-id member-filter)]
     {:members (mapv #(fmt/format-subject attribute-names %) subjects)}))
 
 (defn get-group-members
-  [group-name {:keys [user]}]
-  (let [[subjects attribute-names] (grouper/get-group-members user group-name)]
+  [group-name {:keys [user member-filter]}]
+  (let [[subjects attribute-names] (grouper/get-group-members user group-name member-filter)]
     {:members (mapv #(fmt/format-subject attribute-names %) subjects)}))
 
 (defn get-group-privileges
