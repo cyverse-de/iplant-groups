@@ -29,7 +29,7 @@
     :path-params [group-id :- GroupIdPathParam]
 
     (GET "/members" []
-      :query       [params StandardUserQueryParams]
+      :query       [params GroupMemberListingQueryParams]
       :return      GroupMembers
       :summary     "List Group Members by Group ID"
       :description "This endpoint allows callers to list the members of a single group."
@@ -108,7 +108,7 @@
 
     (context "/members" []
       (GET "/" []
-        :query       [params StandardUserQueryParams]
+        :query       [params GroupMemberListingQueryParams]
         :return      GroupMembers
         :summary     "List Group Members"
         :description "This endpoint allows callers to list the members of a single group."
