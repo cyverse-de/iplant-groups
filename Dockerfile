@@ -7,12 +7,12 @@ ENV PROGRAM=iplant-groups
 VOLUME ["/etc/iplant/de"]
 
 COPY project.clj /usr/src/app/
-RUN lein do clean, deps
+RUN lein deps
 
 COPY conf/main/logback.xml /usr/src/app/
 COPY . /usr/src/app
 
-RUN lein uberjar && \
+RUN lein do clean, uberjar && \
     cp target/iplant-groups-standalone.jar .
 
 RUN ln -s "/usr/bin/java" "/bin/iplant-groups"
