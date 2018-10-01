@@ -1,10 +1,10 @@
-FROM discoenv/clojure-base:master
+FROM clojure:lein-alpine
 
-ENV CONF_TEMPLATE=/usr/src/app/iplant-groups.properties.tmpl
-ENV CONF_FILENAME=iplant-groups.properties
-ENV PROGRAM=iplant-groups
+WORKDIR /usr/src/app
 
-VOLUME ["/etc/iplant/de"]
+RUN apk add --no-cache git
+
+RUN ln -s "/usr/bin/java" "/bin/iplant-groups"
 
 COPY project.clj /usr/src/app/
 RUN lein deps
@@ -15,9 +15,8 @@ COPY . /usr/src/app
 RUN lein do clean, uberjar && \
     cp target/iplant-groups-standalone.jar .
 
-RUN ln -s "/usr/bin/java" "/bin/iplant-groups"
-
-ENTRYPOINT ["run-service", "-Dlogback.configurationFile=/etc/iplant/de/logging/iplant-groups-logging.xml", "-cp", ".:iplant-groups-standalone.jar:/", "iplant_groups.core"]
+ENTRYPOINT ["iplant-groups", "-Dlogback.configurationFile=/etc/iplant/de/logging/data-info-logging.xml", "-cp", ".:data-info-standalone.jar", "data_info.core"]
+CMD ["--help"]
 
 ARG git_commit=unknown
 ARG version=unknown
