@@ -1,111 +1,13 @@
 (ns iplant-groups.routes.schemas.group
-  (:use [common-swagger-api.schema :only [describe NonBlankString ->optional-param]])
-  (:require [iplant-groups.routes.schemas.params :as params]
-            [iplant-groups.routes.schemas.subject :as subject]
+  (:require [common-swagger-api.schema.groups :as group-schema]
             [schema.core :as s]))
 
-(s/defschema BaseGroup
-  {:name
-   (describe String "The internal group name.")
-
-   :type
-   (describe String "The group type name.")
-
-   (s/optional-key :description)
-   (describe String "A brief description of the group.")
-
-   (s/optional-key :display_extension)
-   (describe String "The displayable group name extension.")})
-
-(s/defschema Group
-  (assoc BaseGroup
-   (s/optional-key :display_name)
-   (describe String "The displayable group name.")
-
-   (s/optional-key :extension)
-   (describe String "The internal group name extension.")
-
-   :id_index
-   (describe String "The sequential ID index number.")
-
-   :id
-   (describe String "The group ID.")))
-
-(s/defschema GroupUpdate
-  (-> BaseGroup
-    (->optional-param :name)
-    (dissoc :type)))
-
-(s/defschema GroupStub
-  (-> Group
-    (->optional-param :name)
-    (->optional-param :type)
-    (->optional-param :id)
-    (->optional-param :id_index)))
-
-(s/defschema GroupDetail
-  {(s/optional-key :attribute_names)
-   (describe [String] "Attribute names, not including the ones listed in the group itself.")
-
-   (s/optional-key :attribute_values)
-   (describe [String] "Attribute values, not including the ones listed in the group itself.")
-
-   (s/optional-key :composite_type)
-   (describe String "The type of composite group, if applicable.")
-
-   :created_at
-   (describe Long "The date and time the group was created (ms since epoch).")
-
-   :created_by
-   (describe String "The ID of the subject who created the group.")
-
-   :has_composite
-   (describe Boolean "True if this group has a composite member.")
-
-   :is_composite_factor
-   (describe Boolean "True if this group is a composite member of another group.")
-
-   (s/optional-key :left_group)
-   (describe Group "The left group if this group is a composite.")
-
-   (s/optional-key :modified_at)
-   (describe Long "The date and time the group was last modified (ms since epoch).")
-
-   (s/optional-key :modified_by)
-   (describe String "The ID of the subject who last modified the group.")
-
-   (s/optional-key :right_group)
-   (describe Group "The right group if this group is a composite.")
-
-   (s/optional-key :type_names)
-   (describe [String] "The types associated with this group.")})
-
-(s/defschema GroupWithDetail
-  (assoc Group
-    (s/optional-key :detail)
-    (describe GroupDetail "Detailed information about the group.")))
-
-(s/defschema GroupList
-  {:groups (describe [Group] "The list of groups in the result set.")})
-
-(s/defschema GroupMembers
-  {:members (describe [subject/Subject] "The list of group members.")})
-
-(s/defschema GroupMembersUpdate
-  {:members (describe [NonBlankString] "The new list of member subject IDs.")})
-
-(s/defschema GroupMemberSubjectUpdateResponse
-  {:success
-   (describe Boolean "True if the user was added successfully")
-
-   :subject_id
-   (describe NonBlankString "The subject ID.")
-
-   :source_id
-   (describe NonBlankString "The subject source ID.")
-
-   (s/optional-key :subject_name)
-   (describe NonBlankString "The subject name.")})
-
-(s/defschema GroupMembersUpdateResponse
-  {:results (describe [GroupMemberSubjectUpdateResponse] "The list of membership update results.")})
+(s/defschema BaseGroup (group-schema/base-group "group"))
+(s/defschema Group (group-schema/group "group"))
+(s/defschema GroupUpdate (group-schema/group-update "group"))
+(s/defschema GroupStub (group-schema/group-stub "group"))
+(s/defschema GroupWithDetail (group-schema/group-with-detail "group"))
+(s/defschema GroupList (group-schema/group-list "group" "groups"))
+(s/defschema GroupMembers (group-schema/group-members "group"))
+(def GroupMembersUpdate group-schema/GroupMembersUpdate)
+(def GroupMembersUpdateResponse group-schema/GroupMembersUpdateResponse)

@@ -25,7 +25,7 @@
                  [org.cyverse/clojure-commons "2.8.1"]
                  [org.cyverse/common-cfg "2.8.1"]
                  [org.cyverse/common-cli "2.8.1"]
-                 [org.cyverse/common-swagger-api "2.8.1"]
+                 [org.cyverse/common-swagger-api "2.9.1-SNAPSHOT"]
                  [org.cyverse/event-messages "0.0.1"]
                  [org.cyverse/service-logging "2.8.0"]
                  [com.novemberain/langohr "3.5.1"]
