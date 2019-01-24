@@ -1,8 +1,8 @@
 (ns iplant-groups.routes.subjects
   (:use [common-swagger-api.schema]
+        [common-swagger-api.schema.subjects]
         [iplant-groups.routes.schemas.group]
         [iplant-groups.routes.schemas.params]
-        [iplant-groups.routes.schemas.subject]
         [ring.util.http-response :only [ok]])
   (:require [iplant-groups.service.subjects :as subjects]))
 

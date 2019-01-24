@@ -1,6 +1,6 @@
 (ns iplant-groups.routes.schemas.privileges
   (:use [common-swagger-api.schema :only [describe StandardUserQueryParams NonBlankString]])
-  (:require [iplant-groups.routes.schemas.subject :as subject]
+  (:require [common-swagger-api.schema.subjects :as subjects]
             [iplant-groups.routes.schemas.group :as group]
             [iplant-groups.routes.schemas.folder :as folder]
             [schema.core :as s]))
@@ -58,7 +58,7 @@
    (describe Boolean "Whether the privilege is marked revokable.")
 
    :subject
-   (describe subject/Subject "The subject/user with the privilege.")})
+   (describe subjects/Subject "The subject/user with the privilege.")})
 
 (s/defschema GroupPrivilege
   (assoc Privilege
