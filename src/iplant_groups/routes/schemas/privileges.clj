@@ -1,12 +1,13 @@
 (ns iplant-groups.routes.schemas.privileges
   (:use [common-swagger-api.schema :only [describe StandardUserQueryParams NonBlankString]])
-  (:require [common-swagger-api.schema.subjects :as subjects]
+  (:require [common-swagger-api.schema.groups :as group-schema]
+            [common-swagger-api.schema.subjects :as subjects]
             [iplant-groups.routes.schemas.group :as group]
             [iplant-groups.routes.schemas.folder :as folder]
             [schema.core :as s]))
 
 (def ValidFolderPrivileges (s/enum "create" "stem" "stemAttrRead" "stemAttrUpdate"))
-(def ValidGroupPrivileges (s/enum "view" "read" "update" "admin" "optin" "optout" "groupAttrRead" "groupAttrUpdate"))
+(def ValidGroupPrivileges group-schema/ValidGroupPrivileges)
 (def PrivilegeInheritanceLevel (s/enum "immediate" "inherited"))
 
 (s/defschema GroupPrivilegeSearchQueryParams
