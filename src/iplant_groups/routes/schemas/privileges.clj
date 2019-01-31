@@ -45,21 +45,7 @@
 (s/defschema FolderPrivilegeUpdates
   {:updates (describe [FolderPrivilegeUpdate] "The privilege updates to process.")})
 
-(s/defschema Privilege
-  {:type
-   (describe String "The general type of privilege.")
-
-   :name
-   (describe String "The privilege name, under the type")
-
-   (s/optional-key :allowed)
-   (describe Boolean "Whether the privilege is marked allowed.")
-
-   (s/optional-key :revokable)
-   (describe Boolean "Whether the privilege is marked revokable.")
-
-   :subject
-   (describe subjects/Subject "The subject/user with the privilege.")})
+(def Privilege group-schema/Privilege)
 
 (s/defschema GroupPrivilege
   (assoc Privilege
