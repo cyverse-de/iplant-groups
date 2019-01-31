@@ -24,19 +24,10 @@
     (s/optional-key :inheritance-level)
     (describe PrivilegeInheritanceLevel "Allows the results to be filtered by inheritance level.")))
 
-(s/defschema GroupPrivilegeUpdate
-  {:subject_id (describe String "The subject ID.")
-   :privileges (describe [ValidGroupPrivileges] "The group privileges to assign.")})
-
-(s/defschema GroupPrivilegeUpdates
-  {:updates (describe [GroupPrivilegeUpdate] "The privilege updates to process.")})
-
-(s/defschema GroupPrivilegeRemoval
-  {:subject_id (describe String "The subject ID.")
-   :privileges (describe [ValidGroupPrivileges] "The group privileges to remove.")})
-
-(s/defschema GroupPrivilegeRemovals
-  {:updates (describe [GroupPrivilegeRemoval] "The privilege updates to process.")})
+(def GroupPrivilegeUpdate group-schema/GroupPrivilegeUpdate)
+(def GroupPrivilegeUpdates group-schema/GroupPrivilegeUpdates)
+(def GroupPrivilegeRemoval group-schema/GroupPrivilegeRemoval)
+(def GroupPrivilegeRemovals group-schema/GroupPrivilegeRemovals)
 
 (s/defschema FolderPrivilegeUpdate
   {:subject_id (describe String "The subject ID.")
