@@ -23,3 +23,8 @@
                  (grouper/groups-for-subject-folder user subject-id folder)
                  (grouper/groups-for-subject user subject-id))]
     {:groups (mapv fmt/format-group result)}))
+
+(defn privileges-for-subject
+  [subject-id {:keys [user] :as params}]
+  (let [[privileges attribute-names] (grouper/get-subject-privileges user subject-id params)]
+    {:privileges (mapv #(fmt/format-privilege attribute-names %) privileges)}))
