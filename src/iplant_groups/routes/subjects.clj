@@ -3,6 +3,7 @@
         [common-swagger-api.schema.subjects]
         [iplant-groups.routes.schemas.group]
         [iplant-groups.routes.schemas.params]
+        [iplant-groups.routes.schemas.privileges]
         [ring.util.http-response :only [ok]])
   (:require [iplant-groups.service.subjects :as subjects]))
 
@@ -23,18 +24,26 @@
     Note: the response body will only contain the users that are found in the subject store."
     (ok (subjects/lookup params body)))
 
-  (GET "/:subject-id" []
+  (context "/:subject-id" []
     :path-params [subject-id :- SubjectIdPathParam]
-    :query       [params StandardUserQueryParams]
-    :return      Subject
-    :summary     "Get Subject Information"
-    :description "This endpoint allows callers to get information about a single subject."
-    (ok (subjects/get-subject subject-id params)))
 
-  (GET "/:subject-id/groups" []
-    :path-params [subject-id :- SubjectIdPathParam]
-    :query       [params GroupsForSubjectParams]
-    :return      GroupList
-    :summary     "List Groups for a Subject"
-    :description "This endpoint allows callers to list all groups that a subject belongs to."
-    (ok (subjects/groups-for-subject subject-id params))))
+    (GET "/" []
+      :query       [params StandardUserQueryParams]
+      :return      Subject
+      :summary     "Get Subject Information"
+      :description "This endpoint allows callers to get information about a single subject."
+      (ok (subjects/get-subject subject-id params)))
+
+    (GET "/groups" []
+      :query       [params GroupsForSubjectParams]
+      :return      GroupList
+      :summary     "List Groups for a Subject"
+      :description "This endpoint allows callers to list all groups that a subject belongs to."
+      (ok (subjects/groups-for-subject subject-id params)))
+
+    (GET "/privileges" []
+      :query       [params SubjectPrivilegeSearchQueryParams]
+      :return      Privileges
+      :summary     "List Subject Privileges"
+      :description "This endpoint allows callers to list all of the privileges granted to a subject."
+      (ok (subjects/privileges-for-subject subject-id params)))))

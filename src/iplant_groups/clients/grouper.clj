@@ -488,23 +488,7 @@
         first
         :wsStem)))
 
-;; Get group/folder privileges
-
-;; This is only available as a Lite request; ActAsSubject works differently.
-(defn- format-group-folder-privileges-lookup-request
-  [entity-type username group-or-folder-name params]
-  (if-let [name-key (get {:group  :groupName
-                          :folder :stemName}
-                         entity-type)]
-    {:WsRestGetGrouperPrivilegesLiteRequest
-     (remove-vals nil? {:actAsSubjectId       username
-                        :includeSubjectDetail "T"
-                        :includeGroupDetail   "T"
-                        name-key              group-or-folder-name
-                        :subjectId            (:subject-id params)
-                        :subjectSourceId      (:subject-source-id params)
-                        :privilegeName        (:privilege params)})}
-    (throw+ {:type :clojure-commons.exception/bad-request :entity-type entity-type})))
+;; General privilege filtering functions
 
 (defn- filter-privileges-by-subject-source-id
   [privileges {:keys [subject-source-id]}]
@@ -524,10 +508,49 @@
     :else
     privileges))
 
+(defn- filter-privileges-by-entity-type
+  [privileges {:keys [entity-type]}]
+  (cond
+    (= entity-type "group")
+    (filter (fn [priv] (contains? priv :wsGroup)) privileges)
+
+    (= entity-type "folder")
+    (filter (fn [priv] (contains? priv :wsStem)) privileges)
+
+    :else
+    privileges))
+
+(defn- filter-privileges-by-folder
+  [privileges {:keys [folder]}]
+  (if folder
+    (let [get-name (fn [priv] (or (get-in priv [:wsStem :name]) (get-in priv [:wsGroup :name])))]
+      (filter (fn [priv] (string/starts-with? (get-name priv) folder)) privileges))
+    privileges))
+
 (defn- filter-privileges [privileges params]
   (-> privileges
       (filter-privileges-by-subject-source-id params)
-      (filter-privileges-by-inheritance-level params)))
+      (filter-privileges-by-inheritance-level params)
+      (filter-privileges-by-entity-type params)
+      (filter-privileges-by-folder params)))
+
+;; Get group/folder privileges
+
+;; This is only available as a Lite request; ActAsSubject works differently.
+(defn- format-group-folder-privileges-lookup-request
+  [entity-type username group-or-folder-name params]
+  (if-let [name-key (get {:group  :groupName
+                          :folder :stemName}
+                         entity-type)]
+    {:WsRestGetGrouperPrivilegesLiteRequest
+     (remove-vals nil? {:actAsSubjectId       username
+                        :includeSubjectDetail "T"
+                        :includeGroupDetail   "T"
+                        name-key              group-or-folder-name
+                        :subjectId            (:subject-id params)
+                        :subjectSourceId      (:subject-source-id params)
+                        :privilegeName        (:privilege params)})}
+    (throw+ {:type :clojure-commons.exception/bad-request :entity-type entity-type})))
 
 (defn- get-group-folder-privileges
   [entity-type username name params]
@@ -545,6 +568,26 @@
 (defn get-folder-privileges
   [username folder-name & [params]]
   (get-group-folder-privileges :folder username folder-name params))
+
+;; Get subject privileges
+
+(defn- format-subject-privileges-lookup-request
+  [username subject-id params]
+  {:WsRestGetGrouperPrivilegesLiteRequest
+   (remove-vals nil? {:actAsSubjectId       username
+                      :includeSubjectDetail "T"
+                      :includeGroupDetail   "T"
+                      :subjectId            subject-id
+                      :privilegeName        (:privilege params)})})
+
+(defn get-subject-privileges
+  [username subject-id params]
+  (with-trap [default-error-handler]
+    (let [response (-> (format-subject-privileges-lookup-request username subject-id params)
+                       (grouper-post "grouperPrivileges")
+                       :WsGetGrouperPrivilegesLiteResult)]
+      [(filter-privileges (:privilegeResults response) params)
+       (:subjectAttributeNames response)])))
 
 ;; Add/remove group/folder privileges
 
