@@ -152,15 +152,16 @@
                      :stemName        stem}))
 
 (defn- format-group-search-request
-  [username stem name]
+  [username stem name details]
   {:WsRestFindGroupsRequest
    {:actAsSubjectLookup (act-as-subject-lookup username)
-    :wsQueryFilter      (group-search-query-filter stem name)}})
+    :wsQueryFilter      (group-search-query-filter stem name)
+    :includeGroupDetail (if details "T" "F")}})
 
 (defn group-search
-  [username stem name]
+  [username stem name details]
   (with-trap [default-error-handler]
-    (-> (format-group-search-request username stem name)
+    (-> (format-group-search-request username stem name details)
         (grouper-post "groups")
         :WsFindGroupsResults
         :groupResults)))
@@ -726,16 +727,18 @@
 ;; Groups for a subject.
 
 (defn- format-groups-for-subject-request
-  ([username subject-id]
+  ([username subject-id details]
    {:WsRestGetGroupsRequest
     {:actAsSubjectLookup   (act-as-subject-lookup username)
-     :subjectLookups       [(subject-id-lookup subject-id)]}})
-  ([username subject-id folder-name]
+     :subjectLookups       [(subject-id-lookup subject-id)]
+     :includeGroupDetail   (if details "T" "F")}})
+  ([username subject-id details folder-name]
    {:WsRestGetGroupsRequest
     {:actAsSubjectLookup   (act-as-subject-lookup username)
      :subjectLookups       [(subject-id-lookup subject-id)]
      :wsStemLookup {:stemName folder-name}
-     :stemScope "ALL_IN_SUBTREE"}}))
+     :stemScope "ALL_IN_SUBTREE"
+     :includeGroupDetail   (if details "T" "F")}}))
 
 (defn- groups-for-subject*
   [request-body]
@@ -747,12 +750,12 @@
         :wsGroups)))
 
 (defn groups-for-subject
-  [username subject-id]
-  (groups-for-subject* (format-groups-for-subject-request username subject-id)))
+  [username subject-id details]
+  (groups-for-subject* (format-groups-for-subject-request username subject-id details)))
 
 (defn groups-for-subject-folder
-  [username subject-id folder-name]
-  (groups-for-subject* (format-groups-for-subject-request username subject-id folder-name)))
+  [username subject-id details folder-name]
+  (groups-for-subject* (format-groups-for-subject-request username subject-id details folder-name)))
 
 ;; Attribute Definition Name search
 (defn- format-attribute-name-search-request

@@ -1,6 +1,7 @@
 (ns iplant-groups.routes.schemas.params
   (:use [common-swagger-api.schema :only [describe NonBlankString StandardUserQueryParams]])
-  (:require [clojure.string :as string]
+  (:require [common-swagger-api.schema.groups :as group-schema]
+            [clojure.string :as string]
             [schema.core :as s]))
 
 (def SubjectIdPathParam
@@ -28,7 +29,10 @@
 
 (s/defschema SearchParams
   (assoc StandardUserQueryParams
-    :search (describe NonBlankString "The partial name of the entity to search for.")))
+    :search (describe NonBlankString "The partial name of the entity to search for.")
+
+    group-schema/GroupDetailsParamKey
+    (group-schema/GroupDetailsParamDesc "group")))
 
 (s/defschema GroupSearchParams
   (assoc SearchParams
@@ -43,7 +47,10 @@
 (s/defschema GroupsForSubjectParams
   (assoc StandardUserQueryParams
     (s/optional-key :folder)
-    (describe NonBlankString "The name of the folder to limit to results within.")))
+    (describe NonBlankString "The name of the folder to limit to results within.")
+
+    group-schema/GroupDetailsParamKey
+    (group-schema/GroupDetailsParamDesc "group")))
 
 (s/defschema AttributeSearchParams
   (assoc SearchParams

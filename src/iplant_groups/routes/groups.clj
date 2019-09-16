@@ -9,7 +9,7 @@
 (defroutes groups
   (GET "/" []
     :query       [params GroupSearchParams]
-    :return      GroupList
+    :return      GroupListWithDetail
     :summary     "Group Search"
     :description "This endpoint allows callers to search for groups by name. Only groups that
     are visible to the given user will be listed. The folder name, if provided, contains the

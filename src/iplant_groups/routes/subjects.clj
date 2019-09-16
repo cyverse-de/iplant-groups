@@ -36,7 +36,7 @@
 
     (GET "/groups" []
       :query       [params GroupsForSubjectParams]
-      :return      GroupList
+      :return      GroupListWithDetail
       :summary     "List Groups for a Subject"
       :description "This endpoint allows callers to list all groups that a subject belongs to."
       (ok (subjects/groups-for-subject subject-id params)))
