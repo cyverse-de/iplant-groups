@@ -2,17 +2,17 @@
   (:require [iplant-groups.clients.grouper :as grouper]
             [iplant-groups.service.format :as fmt]))
 
-(defn get-creator-id
+(defn- get-creator-id
   [group]
   (get-in group [:detail :created_by]))
 
-(defn get-creator-ids
+(defn- get-creator-ids
   [groups]
   (-> (mapv #(get-creator-id %) groups)
       (distinct)))
 
-(defn match-subject-for-group
-  "Returns group with the :created_by key updated with the corresponding subject from subjects"
+(defn- match-subject-for-group
+  "Returns group with the :created_by_detail key updated with the corresponding subject from subjects"
   [group subjects]
   (let [group-creator-id (get-creator-id group)
         creator-details  (->> (:subjects subjects)
