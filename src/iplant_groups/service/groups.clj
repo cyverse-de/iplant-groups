@@ -1,12 +1,18 @@
 (ns iplant-groups.service.groups
   (:require [iplant-groups.clients.grouper :as grouper]
             [iplant-groups.service.format :as fmt]
+            [iplant-groups.service.subjects :as subjects]
             [iplant-groups.service.util :as util]
             [iplant-groups.util.service :as service]))
 
 (defn group-search
-  [{:keys [user search folder]}]
-  {:groups (mapv fmt/format-group (grouper/group-search user folder search))})
+  [{:keys [user search folder details]}]
+  (let [results  (grouper/group-search user folder search details)
+        groups   (if details
+                   (->> (mapv fmt/format-group-with-detail results)
+                        (subjects/add-creator-details-to-groups user))
+                   (mapv fmt/format-group results))]
+    {:groups groups}))
 
 (defn get-group
   [group-name {:keys [user]}]

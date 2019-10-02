@@ -8,6 +8,7 @@
 (s/defschema GroupStub (group-schema/group-stub "group"))
 (s/defschema GroupWithDetail (group-schema/group-with-detail "group"))
 (s/defschema GroupList (group-schema/group-list "group" "groups"))
+(s/defschema GroupListWithDetail (group-schema/group-list-with-detail "group" "groups"))
 (s/defschema GroupMembers (group-schema/group-members "group"))
 (def GroupMembersUpdate group-schema/GroupMembersUpdate)
 (def GroupMembersUpdateResponse group-schema/GroupMembersUpdateResponse)
