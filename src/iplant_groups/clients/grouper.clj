@@ -189,6 +189,22 @@
         :groupResults
         first)))
 
+(defn- format-group-retrieval-by-id-request
+  [username group-id]
+  {:WsRestFindGroupsRequest
+   {:actAsSubjectLookup   (act-as-subject-lookup username)
+    :wsGroupLookups       [{:uuid group-id}]
+    :includeGroupDetail   "T"}})
+
+(defn get-group-by-id
+  [username group-id]
+  (with-trap [default-error-handler]
+    (-> (format-group-retrieval-by-id-request username group-id)
+        (grouper-post "groups")
+        :WsFindGroupsResults
+        :groupResults
+        first)))
+
 ;; Group add/update
 
 (defn- format-group-add-update-request

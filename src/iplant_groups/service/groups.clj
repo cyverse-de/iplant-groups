@@ -20,6 +20,12 @@
     (fmt/format-group-with-detail group)
     (service/not-found "group" group-name)))
 
+(defn get-group-by-id
+  [group-id {:keys [user]}]
+  (if-let [group (grouper/get-group-by-id user group-id)]
+    (fmt/format-group-with-detail group)
+    (service/not-found "group" group-id)))
+
 (defn get-group-members-by-id
   [group-id {:keys [user member-filter]}]
   (let [[subjects attribute-names] (grouper/get-group-members-by-id user group-id member-filter)]
