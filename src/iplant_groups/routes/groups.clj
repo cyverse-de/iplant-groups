@@ -28,6 +28,14 @@
   (context "/id/:group-id" []
     :path-params [group-id :- GroupIdPathParam]
 
+    (GET "/" []
+      :query       [params StandardUserQueryParams]
+      :return      GroupWithDetail
+      :summary     "Get Group Information by Group ID"
+      :description "This endpoint allows callers to get detailed information about a single
+      group."
+      (ok (groups/get-group-by-id group-id params)))
+
     (GET "/members" []
       :query       [params GroupMemberListingQueryParams]
       :return      GroupMembers
