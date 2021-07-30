@@ -44,7 +44,7 @@ spec:
                 path: iplant-groups.properties
       containers:
       - name: iplant-groups
-        image: "discoenv/iplant-groups"
+        image: "harbor.cyverse.org/de/iplant-groups"
         resources:
           requests:
             cpu: "160m"
