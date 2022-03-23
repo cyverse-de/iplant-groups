@@ -17,7 +17,7 @@ COPY . /usr/src/app
 RUN lein do clean, uberjar && \
     cp target/iplant-groups-standalone.jar .
 
-ENTRYPOINT ["iplant-groups", "-Dlogback.configurationFile=/etc/iplant/de/logging/iplant-groups-logging.xml", "-javaagent:/usr/src/app/opentelemetry-javaagent.jar", "-Dotel.resourcce.attributes=service.name=iplant-groups", "-cp", ".:iplant-groups-standalone.jar:/", "iplant_groups.core"]
+ENTRYPOINT ["iplant-groups", "-Dlogback.configurationFile=/etc/iplant/de/logging/iplant-groups-logging.xml", "-javaagent:/usr/src/app/opentelemetry-javaagent.jar", "-Dotel.resource.attributes=service.name=iplant-groups", "-cp", ".:iplant-groups-standalone.jar:/", "iplant_groups.core"]
 CMD ["--help"]
 
 ARG git_commit=unknown
