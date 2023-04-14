@@ -3,7 +3,13 @@
             [iplant-groups.service.format :as fmt]
             [iplant-groups.service.subjects :as subjects]
             [iplant-groups.service.util :as util]
-            [iplant-groups.util.service :as service]))
+            [iplant-groups.util.service :as service]
+            [iplant-groups.amqp :as amqp]))
+
+(defn- enqueue-group-propagation
+  [{:keys [id] :as group}]
+  (amqp/publish-msg (str "index.group." id) "")
+  group)
 
 (defn group-search
   [{:keys [user search folder details]}]
@@ -43,8 +49,9 @@
 
 (defn add-group
   [{:keys [type name description display_extension]} {:keys [user]}]
-  (let [group (grouper/add-group user type name display_extension description)]
-    (fmt/format-group-with-detail group)))
+  (let [group (grouper/add-group user type name display_extension description)
+        formatted (fmt/format-group-with-detail group)]
+    (enqueue-group-propagation formatted)))
 
 (defn update-group-privileges
   [group-name {:keys [updates]} {:keys [user replace] :or {replace true} :as params}]
@@ -73,12 +80,13 @@
 
 (defn update-group
   [group-name {:keys [name description display_extension]} {:keys [user]}]
-  (let [group (grouper/update-group user group-name name display_extension description)]
-    (fmt/format-group-with-detail group)))
+  (let [group (grouper/update-group user group-name name display_extension description)
+        formatted (fmt/format-group-with-detail group)]
+    (enqueue-group-propagation formatted)))
 
 (defn delete-group
   [group-name {:keys [user]}]
-  (fmt/format-group (grouper/delete-group user group-name)))
+  (enqueue-group-propagation (fmt/format-group (grouper/delete-group user group-name))))
 
 (defn replace-members
   [group-name {:keys [members]} {:keys [user]}]
