@@ -11,6 +11,11 @@
   (amqp/publish-msg (str "index.group." id) "")
   group)
 
+(defn- enqueue-group-propagation-by-name
+  [group-name user]
+  (when-let [group (grouper/get-group user group-name)]
+    (enqueue-group-propagation (fmt/format-group group))))
+
 (defn group-search
   [{:keys [user search folder details]}]
   (let [results  (grouper/group-search user folder search details)
@@ -90,25 +95,31 @@
 
 (defn replace-members
   [group-name {:keys [members]} {:keys [user]}]
-  {:results (mapv fmt/format-member-subject-update-response
-                  (grouper/replace-group-members user group-name members))})
+  (let [ret (grouper/replace-group-members user group-name members)]
+    (future (enqueue-group-propagation-by-name group-name user))
+    {:results (mapv fmt/format-member-subject-update-response ret)}))
 
 (defn add-members
   [group-name {:keys [members]} {:keys [user]}]
-  (grouper/add-group-members user group-name members)
-  {:results (mapv fmt/format-member-subject-update-response
-                  (grouper/add-group-members user group-name members))})
+  (let [ret (grouper/add-group-members user group-name members)]
+    (future (enqueue-group-propagation-by-name group-name user))
+    {:results (mapv fmt/format-member-subject-update-response ret)}))
 
 (defn remove-members
   [group-name {:keys [members]} {:keys [user]}]
-  (grouper/remove-group-members user group-name members)
-  {:results (mapv fmt/format-member-subject-update-response
-                  (grouper/remove-group-members user group-name members))})
+  (let [ret (grouper/remove-group-members user group-name members)]
+    (future (enqueue-group-propagation-by-name group-name user))
+    {:results (mapv fmt/format-member-subject-update-response ret)}))
 
 (defn add-member
   [group-name subject-id {:keys [user]}]
-  (grouper/add-group-member user group-name subject-id))
+  (let [ret (grouper/add-group-member user group-name subject-id)]
+    (future (enqueue-group-propagation-by-name group-name user))
+    ret))
+
 
 (defn remove-member
   [group-name subject-id {:keys [user]}]
-  (grouper/remove-group-member user group-name subject-id))
+  (let [ret (grouper/remove-group-member user group-name subject-id)]
+    (future (enqueue-group-propagation-by-name group-name user))
+    ret))
