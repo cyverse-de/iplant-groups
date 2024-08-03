@@ -1,12 +1,12 @@
-FROM clojure:openjdk-17-lein-alpine
+FROM clojure:temurin-22-lein-jammy
 
 WORKDIR /usr/src/app
 
-RUN apk add --no-cache git
+RUN apt-get update && \
+    apt-get install -y git && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN ln -s "/opt/openjdk-17/bin/java" "/bin/iplant-groups"
-
-ENV OTEL_TRACES_EXPORTER none
+RUN ln -s "/opt/java/openjdk/bin/java" "/bin/iplant-groups"
 
 COPY project.clj /usr/src/app/
 RUN lein deps
@@ -17,7 +17,7 @@ COPY . /usr/src/app
 RUN lein do clean, uberjar && \
     cp target/iplant-groups-standalone.jar .
 
-ENTRYPOINT ["iplant-groups", "-Dlogback.configurationFile=/etc/iplant/de/logging/iplant-groups-logging.xml", "-javaagent:/usr/src/app/opentelemetry-javaagent.jar", "-Dotel.resource.attributes=service.name=iplant-groups", "-cp", ".:iplant-groups-standalone.jar:/", "iplant_groups.core"]
+ENTRYPOINT ["iplant-groups", "-Dlogback.configurationFile=/etc/iplant/de/logging/iplant-groups-logging.xml", "-cp", ".:iplant-groups-standalone.jar:/", "iplant_groups.core"]
 CMD ["--help"]
 
 ARG git_commit=unknown

@@ -11,7 +11,7 @@
   :description "A REST front-end for Grouper."
   :url "https://github.com/cyverse-de/iplant-groups"
   :license {:name "BSD"
-            :url "http://iplantcollaborative.org/sites/default/files/iPLANT-LICENSE.txt"}
+            :url "https://cyverse.org/license"}
   :manifest {"Git-Ref" ~(git-ref)}
   :uberjar-name "iplant-groups-standalone.jar"
   :dependencies [[org.clojure/clojure "1.11.3"]
@@ -36,14 +36,11 @@
             [lein-ancient "0.7.0"]
             [lein-ring "0.12.6"]
             [test2junit "1.4.4"]]
-  :profiles {:dev {:resource-paths ["conf/test"]
-                   :jvm-opts ["-Dotel.javaagent.enabled=false"]}
+  :profiles {:dev {:resource-paths ["conf/test"]}
              :uberjar {:aot :all}}
   :main ^:skip-aot iplant-groups.core
   :ring {:handler iplant-groups.routes/app
          :init    iplant-groups.core/init-service
          :port    31310}
   :uberjar-exclusions [#"(?i)META-INF/[^/]*[.](SF|DSA|RSA)"]
-  :jvm-opts ["-Dlogback.configurationFile=/etc/iplant/de/logging/iplant-groups-logging.xml"
-             "-javaagent:./opentelemetry-javaagent.jar"
-             "-Dotel.resource.attributes=service.name=iplant-groups"])
+  :jvm-opts ["-Dlogback.configurationFile=/etc/iplant/de/logging/iplant-groups-logging.xml"])
