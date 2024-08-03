@@ -28,7 +28,7 @@
                  [org.cyverse/common-swagger-api "3.4.5"]
                  [org.cyverse/event-messages "0.0.1"]
                  [org.cyverse/service-logging "2.8.4"]
-                 [com.novemberain/langohr "3.5.1"]
+                 [com.novemberain/langohr "5.4.0"]
                  [ring/ring-core "1.12.2"]
                  [ring/ring-jetty-adapter "1.12.2"]]
   :eastwood {:exclude-linters [:unlimited-use]}
