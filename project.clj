@@ -7,7 +7,7 @@
       (string/trim (:out (sh "git" "rev-parse" "HEAD")))
       ""))
 
-(defproject org.cyverse/iplant-groups "2.8.1-SNAPSHOT"
+(defproject org.cyverse/iplant-groups "3.0.1-SNAPSHOT"
   :description "A REST front-end for Grouper."
   :url "https://github.com/cyverse-de/iplant-groups"
   :license {:name "BSD"
