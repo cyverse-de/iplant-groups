@@ -31,8 +31,7 @@
                  [com.novemberain/langohr "3.5.1"]
                  [ring/ring-core "1.12.2"]
                  [ring/ring-jetty-adapter "1.12.2"]]
-  :eastwood {:exclude-namespaces [:test-paths]
-             :linters [:wrong-arity :wrong-ns-form :wrong-pre-post :wrong-tag :misplaced-docstrings]}
+  :eastwood {:exclude-linters [:unlimited-use]}
   :plugins [[jonase/eastwood "1.4.3"]
             [lein-ancient "0.7.0"]
             [lein-ring "0.12.6"]

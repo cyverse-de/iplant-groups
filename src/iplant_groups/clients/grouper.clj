@@ -99,7 +99,7 @@
   ([]
      (act-as-subject-lookup default-act-as-subject-id)))
 
-(defn- parse-boolean
+(defn- coerce-boolean
   [bool-str]
   (when bool-str (Boolean/parseBoolean bool-str)))
 
@@ -867,7 +867,7 @@
                       :roleLookups (format-role-lookup params)
                       :actions (format-action-names-lookup params)
                       :wsSubjectLookups (subject-lookups [subject_id])
-                      :immediateOnly (parse-boolean immediate_only)})})
+                      :immediateOnly (coerce-boolean immediate_only)})})
 
 (defn permission-assignment-search*
   [request-body]
