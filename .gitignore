@@ -4,7 +4,6 @@
 pom.xml
 pom.xml.asc
 *.jar
-!opentelemetry-javaagent.jar
 *.class
 .eastwood
 /.lein-*
@@ -15,3 +14,5 @@ build.xml
 test2junit
 /.idea
 *.iml
+.clj-kondo
+.lsp
