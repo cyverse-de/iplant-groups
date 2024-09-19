@@ -17,7 +17,7 @@ COPY . /usr/src/app
 RUN lein do clean, uberjar && \
     cp target/iplant-groups-standalone.jar .
 
-ENTRYPOINT ["iplant-groups", "-Dlogback.configurationFile=/etc/iplant/de/logging/iplant-groups-logging.xml", "-cp", ".:iplant-groups-standalone.jar:/", "iplant_groups.core"]
+ENTRYPOINT ["iplant-groups", "-Dlogback.configurationFile=/usr/src/app/logback.xml", "-cp", ".:iplant-groups-standalone.jar:/", "iplant_groups.core"]
 CMD ["--help"]
 
 ARG git_commit=unknown
