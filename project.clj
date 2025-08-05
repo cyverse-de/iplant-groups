@@ -25,7 +25,7 @@
                  [org.cyverse/clojure-commons "3.0.9"]
                  [org.cyverse/common-cfg "2.8.3"]
                  [org.cyverse/common-cli "2.8.2"]
-                 [org.cyverse/common-swagger-api "3.4.5"]
+                 [org.cyverse/common-swagger-api "3.4.12"]
                  [org.cyverse/event-messages "0.0.1"]
                  [org.cyverse/service-logging "2.8.4"]
                  [com.novemberain/langohr "5.4.0"]

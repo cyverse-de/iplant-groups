@@ -18,7 +18,9 @@
         creator-details  (->> (:subjects subjects)
                               (filter #(= (:id %) group-creator-id))
                               first)]
-    (assoc-in group [:detail :created_by_detail] creator-details)))
+    (if creator-details
+      (assoc-in group [:detail :created_by_detail] creator-details)
+      group)))
 
 (defn lookup
   [{:keys [user]} {subject-ids :subject_ids}]
