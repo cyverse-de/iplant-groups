@@ -14,7 +14,7 @@
             :url "https://cyverse.org/license"}
   :manifest {"Git-Ref" ~(git-ref)}
   :uberjar-name "iplant-groups-standalone.jar"
-  :dependencies [[org.clojure/clojure "1.11.3"]
+  :dependencies [[org.clojure/clojure "1.12.5"]
                  [cheshire "5.13.0"]
                  [clj-http "3.13.0"]
                  [clj-time "0.15.2"]
@@ -33,7 +33,7 @@
                  [ring/ring-jetty-adapter "1.12.2"]]
   :eastwood {:exclude-linters [:unlimited-use]}
   :plugins [[jonase/eastwood "1.4.3"]
-            [lein-ancient "0.7.0"]
+            [lein-ancient "1.0.0"]
             [lein-ring "0.12.6"]
             [test2junit "1.4.4"]]
   :profiles {:dev {:resource-paths ["conf/test"]}
